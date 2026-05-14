@@ -1067,14 +1067,11 @@
                 document.getElementById('customMsgCard').classList.add('visible');
                 document.getElementById('customMsgText').textContent = `"${customMsg}"`;
             }
-
+            let totalSeconds = Math.round(hoursUntil * 3600);
             startCountdown();
-            setVibeCopy();
             setupCity();
 
         // ─── Countdown ──────────────────────────────────────────────
-        let totalSeconds = Math.round(hoursUntil * 3600);
-
         function startCountdown() {
             updateCountdown();
             setInterval(updateCountdown, 1000);
