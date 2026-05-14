@@ -159,32 +159,6 @@
             }
         }
 
-        /* ============ MAIN CONTENT ============ */
-        #tom-cruise {
-            position: fixed;
-            right: 18px;
-            /* Larger, responsive size */
-            width: clamp(120px, 12vw, 260px);
-            opacity: 0.75;
-            z-index: 500;
-            pointer-events: none;
-            background: transparent;
-            /* Blend with the dark background so image appears naturally transparent */
-            mix-blend-mode: screen;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6));
-            animation: tomSlide 8s ease-in-out infinite;
-            transform-origin: center;
-            will-change: transform, opacity;
-        }
-
-        @keyframes tomSlide {
-            0%   { top: 10vh;  transform: rotate(-4deg) scaleX(-1); }
-            45%  { top: 75vh;  transform: rotate(4deg)  scaleX(-1); }
-            50%  { top: 75vh;  transform: rotate(4deg)  scaleX(1);  }
-            95%  { top: 10vh;  transform: rotate(-4deg) scaleX(1);  }
-            100% { top: 10vh;  transform: rotate(-4deg) scaleX(-1); }
-        }
-
         #mainContent {
             opacity: 0;
             transition: opacity 0.8s ease;
@@ -851,7 +825,8 @@
             background: var(--surface);
             border: 2px solid var(--red);
             padding: 40px 30px;
-            max-width: 500px;
+            /* Allow larger modal so the GIF isn't overly cropped */
+            max-width: 760px;
             width: 100%;
             text-align: center;
             box-shadow: 0 0 60px rgba(255, 26, 26, 0.2);
@@ -912,17 +887,6 @@
 </head>
 
 <body>
-    <img id="tom-cruise" src="assets/tom-cruise.png" alt="Agent Tom" />
-    <!-- INTRO SCREEN -->
-    <div id="introScreen">
-        <div class="intro-classified">CONFIDENTIAL</div>
-        <div class="intro-agent" id="introAgentLine">Agent...</div>
-        <div class="intro-sub">You are at severe risk of fumbling.</div>
-        <div class="intro-bar">
-            <div class="intro-bar-fill"></div>
-        </div>
-    </div>
-
     <!-- MAIN CONTENT -->
     <div id="mainContent">
         <div class="vignette"></div>
@@ -1061,9 +1025,8 @@
     <!-- ABORT MODAL -->
     <div class="modal-overlay" id="abortModal" onclick="closeAbortModal(event)">
         <div class="modal-card">
-            <img src="assets/fumble.gif" alt="The Fumble" style="width:100%; max-height:200px; object-fit:cover;
-                border:2px solid var(--red); margin-bottom:20px;
-                box-shadow:0 0 30px rgba(255,26,26,0.4);" />
+            <img src="assets/fumble.gif" alt="The Fumble"
+                style="display:block;margin:0 auto 20px;max-width:720px;width:100%;height:auto;max-height:420px;object-fit:contain;border:2px solid var(--red);box-shadow:0 0 30px rgba(255,26,26,0.4);" />
             <div class="modal-title">ABORT?</div>
             <p class="modal-text">
                 You're genuinely considering not going on a date with someone
