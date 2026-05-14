@@ -163,13 +163,18 @@
         #tom-cruise {
             position: fixed;
             right: 18px;
-            width: 80px;
-            opacity: 0.88;
+            /* Larger, responsive size */
+            width: clamp(120px, 12vw, 260px);
+            opacity: 0.75;
             z-index: 500;
             pointer-events: none;
-            filter: drop-shadow(0 0 12px rgba(255,107,0,0.5));
+            background: transparent;
+            /* Blend with the dark background so image appears naturally transparent */
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6));
             animation: tomSlide 8s ease-in-out infinite;
             transform-origin: center;
+            will-change: transform, opacity;
         }
 
         @keyframes tomSlide {
