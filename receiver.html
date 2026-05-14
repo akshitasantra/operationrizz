@@ -1053,31 +1053,24 @@
         const vibe = params.get('v') || 'surprise';
         const customMsg = params.get('m') || '';
 
-        // ─── Intro Screen ────────────────────────────────────────────
-        document.getElementById('introAgentLine').textContent = `Agent ${recipientName}…`;
+        // ─── Init ────────────────────────────────────────────────────
+            document.getElementById('heroName').textContent = recipientName.toUpperCase();
+            document.getElementById('mainContent').classList.add('visible');
 
-        setTimeout(() => {
-            // Baddie photo
             const photoUrl = params.get('photo');
             if (photoUrl) {
                 document.getElementById('baddieImg').src = decodeURIComponent(photoUrl);
                 document.getElementById('baddieCard').style.display = 'block';
             }
-            document.getElementById('heroName').textContent = recipientName.toUpperCase();
-            document.getElementById('introScreen').classList.add('hidden');
-            setTimeout(() => {
-                document.getElementById('mainContent').classList.add('visible');
-                document.getElementById('introScreen').style.display = 'none';
-                startCountdown();
-                setThreatLevel();
-                setVibeCopy();
-                setupCity();
-                if (customMsg) {
-                    document.getElementById('customMsgCard').classList.add('visible');
-                    document.getElementById('customMsgText').textContent = `"${customMsg}"`;
-                }
-            }, 800);
-        }, 4800);
+
+            if (customMsg) {
+                document.getElementById('customMsgCard').classList.add('visible');
+                document.getElementById('customMsgText').textContent = `"${customMsg}"`;
+            }
+
+            startCountdown();
+            setVibeCopy();
+            setupCity();
 
         // ─── Countdown ──────────────────────────────────────────────
         let totalSeconds = Math.round(hoursUntil * 3600);
