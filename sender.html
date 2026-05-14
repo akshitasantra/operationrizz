@@ -577,7 +577,7 @@
 
             // Build the receiver URL with query params
             // In production replace with your actual receiver page URL
-            const base = window.location.origin + '/receiver.html';
+            const base = window.location.href.replace('sender.html', '') + 'receiver.html';
             const params = new URLSearchParams({
                 n: name,
                 h: hours,
