@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DON'T FUMBLE</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Oswald:wght@700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --red: #FF1A1A;
+            --orange: #FF6B00;
+            --yellow: #FFD600;
+            --green: #00FF88;
+            --bg: #060606;
+            --surface: #0e0e0e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Scanlines */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+                    rgba(255, 255, 255, 0.012) 2px,
+                    rgba(255, 255, 255, 0.012) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ============ INTRO SCREEN ============ */
+        #introScreen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9000;
+            gap: 20px;
+        }
+
+        #introScreen.hidden {
+            animation: fadeOut 0.8s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                pointer-events: none;
+            }
+        }
+
+        .intro-classified {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(40px, 10vw, 80px);
+            letter-spacing: 12px;
+            color: var(--red);
+            text-shadow: 0 0 40px var(--red), 0 0 80px rgba(255, 26, 26, 0.4);
+            animation: introFlicker 0.1s infinite;
+            text-align: center;
+        }
+
+        @keyframes introFlicker {
+            0% {
+                opacity: 1;
+            }
+
+            49% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.85;
+            }
+
+            51% {
+                opacity: 1;
+            }
+
+            89% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .intro-agent {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(22px, 5vw, 40px);
+            letter-spacing: 6px;
+            color: #fff;
+            opacity: 0;
+            animation: appear 0.5s ease 1.4s forwards;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .intro-sub {
+            font-size: 12px;
+            color: #555;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: appear 0.5s ease 2.2s forwards;
+            text-align: center;
+        }
+
+        .intro-bar {
+            width: 300px;
+            max-width: 80vw;
+            height: 3px;
+            background: #111;
+            overflow: hidden;
+            opacity: 0;
+            animation: appear 0.3s ease 2.8s forwards;
+        }
+
+        .intro-bar-fill {
+            height: 100%;
+            background: var(--red);
+            width: 0%;
+            box-shadow: 0 0 10px var(--red);
+            animation: fillBar 2s ease 2.8s forwards;
+        }
+
+        @keyframes fillBar {
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes appear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        #mainContent {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        #mainContent.visible {
+            opacity: 1;
+        }
+
+        /* Red vignette */
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 60%, rgba(255, 26, 26, 0.08) 100%);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* HEADER */
+        .top-bar {
+            background: var(--red);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 50px 20px 30px;
+            position: relative;
+        }
+
+        .agent-label {
+            font-size: 12px;
+            letter-spacing: 5px;
+            color: #555;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .agent-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(50px, 14vw, 130px);
+            line-height: 0.85;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .risk-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(16px, 4vw, 28px);
+            letter-spacing: 4px;
+            color: var(--red);
+            text-shadow: 0 0 20px rgba(255, 26, 26, 0.5);
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
+        /* COUNTDOWN */
+        .countdown-section {
+            background: #000;
+            border-top: 2px solid var(--red);
+            border-bottom: 2px solid var(--red);
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: inset 0 0 60px rgba(255, 26, 26, 0.05);
+        }
+
+        .countdown-label {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: var(--red);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .countdown-display {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(50px, 16vw, 130px);
+            letter-spacing: 4px;
+            color: var(--red);
+            text-shadow:
+                0 0 20px var(--red),
+                0 0 60px rgba(255, 26, 26, 0.4),
+                0 0 120px rgba(255, 26, 26, 0.2);
+            line-height: 1;
+            animation: countPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes countPulse {
+
+            0%,
+            100% {
+                filter: brightness(1);
+            }
+
+            50% {
+                filter: brightness(1.15);
+            }
+        }
+
+        .countdown-sub {
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 3px;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
+        /* MAIN DASHBOARD */
+        .dashboard {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            letter-spacing: 5px;
+            color: var(--orange);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--orange), transparent);
+        }
+
+        /* THREAT METER */
+        .threat-card {
+            background: var(--surface);
+            border: 1px solid #1a1a1a;
+            padding: 24px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .threat-meter {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .threat-segment {
+            flex: 1;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .threat-segment .bar {
+            position: absolute;
+            inset: 0;
+            opacity: 0.2;
+            transition: opacity 0.3s;
+        }
+
+        .threat-segment.active .bar {
+            opacity: 1;
+        }
+
+        .threat-segment:nth-child(1) .bar {
+            background: var(--green);
+            box-shadow: 0 0 20px var(--green);
+        }
+
+        .threat-segment:nth-child(2) .bar {
+            background: var(--yellow);
+            box-shadow: 0 0 20px var(--yellow);
+        }
+
+        .threat-segment:nth-child(3) .bar {
+            background: var(--orange);
+            box-shadow: 0 0 20px var(--orange);
+        }
+
+        .threat-segment:nth-child(4) .bar {
+            background: var(--red);
+            box-shadow: 0 0 20px var(--red);
+            animation: segPulse 0.7s ease-in-out infinite;
+        }
+
+        @keyframes segPulse {
+
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .threat-segment.active:nth-child(4) .bar {
+            animation: segActivePulse 0.7s ease-in-out infinite;
+        }
+
+        @keyframes segActivePulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .threat-labels {
+            display: flex;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        .threat-labels span {
+            flex: 1;
+            text-align: center;
+        }
+
+        .threat-status {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 3px;
+            margin-top: 12px;
+            transition: color 0.5s;
+        }
+
+        /* PROBABILITY METER */
+        .prob-card {
+            background: var(--surface);
+            border: 1px solid #1a1a1a;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .prob-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #555;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .prob-bar-wrap {
+            background: #000;
+            height: 50px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #1a1a1a;
+        }
+
+        .prob-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--red), var(--orange), var(--yellow));
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            box-shadow: 4px 0 20px rgba(255, 214, 0, 0.5);
+        }
+
+        .prob-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 60px;
+            letter-spacing: 2px;
+            line-height: 1;
+            color: var(--yellow);
+            text-shadow: 0 0 30px rgba(255, 214, 0, 0.5);
+            margin-top: 10px;
+            transition: all 0.4s;
+        }
+
+        .prob-caption {
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 2px;
+            margin-top: 6px;
+        }
+
+        /* MISSION CHECKLIST */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            background: var(--surface);
+            border: 1px solid #1a1a1a;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .check-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #333;
+            transition: background 0.3s;
+        }
+
+        .check-item:hover {
+            border-color: #333;
+        }
+
+        .check-item:hover::before {
+            background: var(--orange);
+        }
+
+        .check-item.done {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        .check-item.done::before {
+            background: var(--green);
+        }
+
+        .check-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #333;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .check-item.done .check-box {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        .check-text {
+            flex: 1;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .check-sub {
+            font-size: 10px;
+            color: #444;
+            margin-top: 2px;
+            letter-spacing: 1px;
+        }
+
+        /* DANGER BUTTONS */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .danger-btn {
+            display: block;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            background: none;
+            outline: none;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .danger-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 24px 16px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.1s;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            color: #fff;
+        }
+
+        /* Maps Button - Green */
+        .btn-maps .danger-inner {
+            background: linear-gradient(135deg, #00b360, #006630);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 6px 0 #003018,
+                0 10px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .btn-maps:hover .danger-inner {
+            transform: translateY(3px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #003018, 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-maps:active .danger-inner {
+            transform: translateY(6px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #003018, 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Apology button - Orange */
+        .btn-apology .danger-inner {
+            background: linear-gradient(135deg, #FF8C00, #CC5500);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 6px 0 #662800,
+                0 10px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .btn-apology:hover .danger-inner {
+            transform: translateY(3px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #662800, 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-apology:active .danger-inner {
+            transform: translateY(6px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #662800, 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Abort - Red */
+        .btn-abort {
+            grid-column: span 2;
+        }
+
+        .btn-abort .danger-inner {
+            background: linear-gradient(135deg, #FF1A1A, #990000);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 6px 0 #4d0000,
+                0 10px 20px rgba(0, 0, 0, 0.7);
+            font-size: 24px;
+        }
+
+        .btn-abort:hover .danger-inner {
+            transform: translateY(3px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 3px 0 #4d0000, 0 5px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-abort:active .danger-inner {
+            transform: translateY(6px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0px 0 #4d0000, 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-icon {
+            font-size: 30px;
+        }
+
+        .btn-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 2px;
+            font-family: 'Space Mono', monospace;
+            font-weight: 400;
+        }
+
+        /* FAILURE CONSEQUENCES */
+        .consequences-card {
+            background: rgba(255, 26, 26, 0.04);
+            border: 1px solid rgba(255, 26, 26, 0.2);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .consequences-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 3px;
+            color: var(--red);
+            margin-bottom: 16px;
+            text-shadow: 0 0 10px rgba(255, 26, 26, 0.4);
+        }
+
+        .consequence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .consequence-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13px;
+            color: #888;
+            padding: 8px 0;
+            border-bottom: 1px solid #111;
+        }
+
+        .consequence-item:last-child {
+            border-bottom: none;
+        }
+
+        .consequence-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .consequence-text {
+            color: #bbb;
+        }
+
+        .consequence-sub {
+            font-size: 10px;
+            color: #444;
+            margin-top: 2px;
+            letter-spacing: 1px;
+        }
+
+        /* Custom message banner */
+        .custom-msg-card {
+            background: rgba(255, 214, 0, 0.05);
+            border: 1px solid rgba(255, 214, 0, 0.2);
+            padding: 18px 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .custom-msg-card.visible {
+            display: block;
+        }
+
+        .custom-msg-label {
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--yellow);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .custom-msg-text {
+            font-size: 14px;
+            color: #ddd;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        /* Meme floaters */
+        .floater {
+            position: fixed;
+            font-size: 60px;
+            opacity: 0.04;
+            pointer-events: none;
+            user-select: none;
+            animation: floatBob 6s ease-in-out infinite;
+        }
+
+        @keyframes floatBob {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(var(--rot));
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(calc(var(--rot) + 5deg));
+            }
+        }
+
+        .floater:nth-child(1) {
+            top: 15%;
+            right: 3%;
+            --rot: 12deg;
+            animation-delay: 0s;
+        }
+
+        .floater:nth-child(2) {
+            bottom: 20%;
+            left: 2%;
+            --rot: -8deg;
+            animation-delay: 2s;
+            font-size: 50px;
+        }
+
+        .floater:nth-child(3) {
+            top: 50%;
+            right: 1%;
+            --rot: 20deg;
+            animation-delay: 4s;
+            font-size: 40px;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 10px;
+            color: #222;
+            letter-spacing: 2px;
+            padding: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Abort modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 8000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            padding: 20px;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-card {
+            background: var(--surface);
+            border: 2px solid var(--red);
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(255, 26, 26, 0.2);
+        }
+
+        .modal-emoji {
+            font-size: 80px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            letter-spacing: 3px;
+            color: var(--red);
+            margin-bottom: 10px;
+        }
+
+        .modal-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-quote {
+            font-size: 12px;
+            color: #333;
+            border-left: 2px solid #222;
+            padding: 10px 16px;
+            text-align: left;
+            font-style: italic;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            background: #111;
+            color: #555;
+            border: 1px solid #222;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            padding: 12px 24px;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            border-color: #444;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- INTRO SCREEN -->
+    <div id="introScreen">
+        <div class="intro-classified">CONFIDENTIAL</div>
+        <div class="intro-agent" id="introAgentLine">Agent...</div>
+        <div class="intro-sub">You are at severe risk of fumbling.</div>
+        <div class="intro-bar">
+            <div class="intro-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="mainContent">
+        <div class="vignette"></div>
+
+        <div class="top-bar">
+            <span>⚠ CLASSIFIED MISSION BRIEFING</span>
+            <span><span class="blink">●</span> LIVE</span>
+        </div>
+
+        <div class="hero">
+            <p class="agent-label">Agent</p>
+            <span class="agent-name" id="heroName">JASON</span>
+            <p class="risk-text" id="riskText">You Are At Severe Risk Of
+                Fumbling</p>
+        </div>
+
+        <!-- COUNTDOWN -->
+        <div class="countdown-section">
+            <div class="countdown-label">⏱ Time Until Fumble</div>
+            <div class="countdown-display" id="countdownDisplay">00:00:00</div>
+            <div class="countdown-sub">hours · minutes · seconds</div>
+        </div>
+
+        <div class="dashboard">
+
+            <!-- Custom Message -->
+            <div class="custom-msg-card" id="customMsgCard">
+                <div class="custom-msg-label">Incoming Intel from HQ</div>
+                <div class="custom-msg-text" id="customMsgText"></div>
+            </div>
+
+            <!-- THREAT LEVEL -->
+            <div class="section-title">Threat Level</div>
+            <div class="threat-card">
+                <div class="threat-meter">
+                    <div class="threat-segment" id="t1">
+                        <div class="bar"></div>
+                    </div>
+                    <div class="threat-segment" id="t2">
+                        <div class="bar"></div>
+                    </div>
+                    <div class="threat-segment" id="t3">
+                        <div class="bar"></div>
+                    </div>
+                    <div class="threat-segment" id="t4">
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="threat-labels">
+                    <span>Stable</span>
+                    <span>Concerning</span>
+                    <span>Critical</span>
+                    <span>You're Blocked Buddy</span>
+                </div>
+                <div class="threat-status" id="threatStatus">Assessing...</div>
+            </div>
+
+            <!-- PROBABILITY METER -->
+            <div class="section-title">Bag Security</div>
+            <div class="prob-card">
+                <div class="prob-label">Probability of Securing the Bag</div>
+                <div class="prob-bar-wrap">
+                    <div class="prob-bar-fill" id="probBar" style="width: 12%;">
+                    </div>
+                </div>
+                <div class="prob-number" id="probNumber">12%</div>
+                <div class="prob-caption" id="probCaption">Currently not looking
+                    good. Complete objectives to improve odds.</div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="section-title">Execute Actions</div>
+            <div class="action-grid">
+
+                <button class="danger-btn btn-maps" id="mapsBtn"
+                    onmouseover="boostProb(18, 'Finding spots shows initiative. She\'ll notice.')"
+                    onmouseout="restoreProb()" onclick="openMaps()">
+                    <div class="danger-inner">
+                        <span class="btn-icon"></span>
+                        Locate Restaurants
+                        <span class="btn-sub" id="cityLabel">Nearby</span>
+                    </div>
+                </button>
+
+                <button class="danger-btn btn-apology"
+                    onmouseover="boostProb(5, 'Apology queued. Desperation noted.')"
+                    onmouseout="restoreProb()" onclick="sendApology()">
+                    <div class="danger-inner">
+                        <span class="btn-icon"></span>
+                        Send Apology
+                        <span class="btn-sub">emergency protocol</span>
+                    </div>
+                </button>
+
+                <button class="danger-btn btn-abort"
+                    onmouseover="boostProb(-30, 'You are actually considering this. Incredible.')"
+                    onmouseout="restoreProb()" onclick="showAbortModal()">
+                    <div class="danger-inner">
+                        <span class="btn-icon"></span>
+                        ABORT MISSION
+                        <span class="btn-sub">not recommended · career ending
+                            move</span>
+                    </div>
+                </button>
+
+            </div>
+
+            <!-- FAILURE CONSEQUENCES -->
+            <div class="section-title">Failure Consequences</div>
+            <div class="consequences-card">
+                <div class="consequences-title">⚠ Failure to complete this
+                    mission may result in:</div>
+                <div class="consequence-list">
+                    <div class="consequence-item">
+                        <span class="consequence-icon"></span>
+                        <div>
+                            <div class="consequence-text">Total and irreversible
+                                loss of aura</div>
+                            <div class="consequence-sub">Scientists confirm:
+                                once gone, very hard to get back</div>
+                        </div>
+                    </div>
+                    <div class="consequence-item">
+                        <span class="consequence-icon"></span>
+                        <div>
+                            <div class="consequence-text">Left on delivered for
+                                3+ business days</div>
+                            <div class="consequence-sub">She saw it. She chose
+                                peace.</div>
+                        </div>
+                    </div>
+                    <div class="consequence-item">
+                        <span class="consequence-icon"></span>
+                        <div>
+                            <div class="consequence-text">Her friends are
+                                already judging you collectively</div>
+                            <div class="consequence-sub">You have a group chat
+                                rating. You don't want to know it.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-note">
+            This message will self-destruct upon completion of all objectives ·
+            Probably not but sounds cool
+        </div>
+    </div>
+
+    <!-- ABORT MODAL -->
+    <div class="modal-overlay" id="abortModal" onclick="closeAbortModal(event)">
+        <div class="modal-card">
+            <span class="modal-emoji">🤡</span>
+            <div class="modal-title">ABORT?</div>
+            <p class="modal-text">
+                You're genuinely considering not going on a date with someone
+                who likes you.<br>
+                Let that sink in for a second.
+            </p>
+            <div class="modal-quote">
+                "Bro just stayed home. Said he was 'tired'. She posted a story
+                within 45 minutes. He hasn't recovered."<br>
+                — Anonymous Reddit thread, r/Wellthatsucks
+            </div>
+            <p class="modal-text" style="font-size: 11px; color: #333;">
+                There is no abort button. There is only execution or fumble.
+                Choose wisely.
+            </p>
+            <button class="modal-close" onclick="closeAbortModal()">← Return to
+                Mission (Good Choice)</button>
+        </div>
+    </div>
+
+    <!-- BACKGROUND AUDIO (optional - uncomment to add) -->
+    <!--
+<audio id="bgAudio" loop autoplay>
+  <source src="https://your-cdn.com/mission-theme.mp3" type="audio/mpeg"/>
+</audio>
+-->
+
+    <script>
+        // ─── Parse URL Params ───────────────────────────────────────
+        const params = new URLSearchParams(window.location.search);
+        const recipientName = params.get('n') || 'AGENT';
+        const hoursUntil = parseFloat(params.get('h')) || 24;
+        const city = params.get('c') || 'Your City';
+        const vibe = params.get('v') || 'surprise';
+        const customMsg = params.get('m') || '';
+
+        // ─── Intro Screen ────────────────────────────────────────────
+        document.getElementById('introAgentLine').textContent = `Agent ${recipientName}…`;
+
+        setTimeout(() => {
+            document.getElementById('heroName').textContent = recipientName.toUpperCase();
+            document.getElementById('introScreen').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('mainContent').classList.add('visible');
+                document.getElementById('introScreen').style.display = 'none';
+                startCountdown();
+                setThreatLevel();
+                setVibeCopy();
+                setupCity();
+                if (customMsg) {
+                    document.getElementById('customMsgCard').classList.add('visible');
+                    document.getElementById('customMsgText').textContent = `"${customMsg}"`;
+                }
+            }, 800);
+        }, 4800);
+
+        // ─── Countdown ──────────────────────────────────────────────
+        let totalSeconds = Math.round(hoursUntil * 3600);
+
+        function startCountdown() {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        function updateCountdown() {
+            if (totalSeconds <= 0) {
+                document.getElementById('countdownDisplay').textContent = '00:00:00';
+                document.getElementById('countdownDisplay').style.color = '#ff0000';
+                return;
+            }
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+            document.getElementById('countdownDisplay').textContent =
+                `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            totalSeconds--;
+        }
+
+        // ─── Threat Level ────────────────────────────────────────────
+        function setThreatLevel() {
+            let level, statusText, statusColor;
+
+            if (vibe === 'ice') {
+                level = 4; statusText = "⚠ She's Texting Her Friends About You Right Now";
+                statusColor = 'var(--red)';
+            } else if (vibe === 'classy') {
+                level = 1; statusText = '✅ Stable — But Don\'t Get Comfortable';
+                statusColor = 'var(--green)';
+            } else if (vibe === 'cheap') {
+                level = 3; statusText = '🔶 Critical — Budget Noted. Noted.';
+                statusColor = 'var(--orange)';
+            } else if (hoursUntil < 3) {
+                level = 4; statusText = '🚨 She\'s Texting Her Friends About You Right Now';
+                statusColor = 'var(--red)';
+            } else if (hoursUntil < 12) {
+                level = 3; statusText = '🔶 Critical — Minimal Time Remaining';
+                statusColor = 'var(--orange)';
+            } else if (hoursUntil < 24) {
+                level = 2; statusText = '⚡ Concerning — Do Not Delay';
+                statusColor = 'var(--yellow)';
+            } else {
+                level = 1; statusText = '✅ Stable — You Have Time. Use It.';
+                statusColor = 'var(--green)';
+            }
+
+            for (let i = 1; i <= level; i++) {
+                document.getElementById(`t${i}`).classList.add('active');
+            }
+
+            const ts = document.getElementById('threatStatus');
+            ts.textContent = statusText;
+            ts.style.color = statusColor;
+        }
+
+        // ─── Probability Meter ───────────────────────────────────────
+        let baseProbability = 12;
+        let bonusProb = 0;
+        let currentProb = 12;
+        const checkBonuses = {};
+
+        function updateProbDisplay(prob, caption) {
+            prob = Math.max(3, Math.min(99, Math.round(prob)));
+            document.getElementById('probBar').style.width = prob + '%';
+            document.getElementById('probNumber').textContent = prob + '%';
+            if (caption) document.getElementById('probCaption').textContent = caption;
+        }
+
+        function boostProb(delta, caption) {
+            const newProb = baseProbability + delta;
+            updateProbDisplay(newProb, caption);
+        }
+
+        function restoreProb() {
+            updateProbDisplay(currentProb);
+        }
+
+        function toggleCheck(id, bonus, caption) {
+            const item = document.getElementById(id);
+            const box = document.getElementById(id.replace('c', 'cb'));
+
+            if (item.classList.contains('done')) {
+                item.classList.remove('done');
+                box.textContent = '';
+                if (checkBonuses[id]) { baseProbability -= checkBonuses[id]; delete checkBonuses[id]; }
+            } else {
+                item.classList.add('done');
+                box.textContent = '✓';
+                checkBonuses[id] = bonus;
+                baseProbability += bonus;
+            }
+
+            currentProb = baseProbability;
+            updateProbDisplay(currentProb, caption || '');
+        }
+
+        // ─── Vibe-based copy ─────────────────────────────────────────
+        function setVibeCopy() {
+            const riskTexts = {
+                classy: 'Execute With Class. Don\'t Be Boring.',
+                fun: 'Make Her Laugh. Or Else.',
+                cheap: 'Budget Has Been Noted by Intelligence.',
+                ice: 'You Are Already In Trouble. Move Quickly.',
+                surprise: 'You Are At Severe Risk Of Fumbling.'
+            };
+            document.getElementById('riskText').textContent = riskTexts[vibe] || riskTexts.surprise;
+        }
+
+        // ─── City / Maps ──────────────────────────────────────────────
+        function setupCity() {
+            document.getElementById('cityLabel').textContent = `near ${city}`;
+        }
+
+        function openMaps() {
+            const query = encodeURIComponent(`romantic restaurants near ${city}`);
+            window.open(`https://www.google.com/maps/search/${query}`, '_blank');
+        }
+
+        // ─── Apology ─────────────────────────────────────────────────
+        function sendApology() {
+            const msgs = [
+                "I know I've been slacking. That changes tonight. I got us something.",
+                "Look I'm sorry for being an idiot. Let me make it up to you.",
+                "I've been off my game. Not tonight though.",
+                "You deserve better than what I've been giving you. Working on it.",
+            ];
+            const msg = encodeURIComponent(msgs[Math.floor(Math.random() * msgs.length)]);
+            window.open(`sms:?&body=${msg}`, '_blank');
+        }
+
+        // ─── Abort Modal ─────────────────────────────────────────────
+        function showAbortModal() {
+            document.getElementById('abortModal').classList.add('visible');
+        }
+
+        function closeAbortModal(e) {
+            if (!e || e.target === document.getElementById('abortModal')) {
+                document.getElementById('abortModal').classList.remove('visible');
+            }
+        }
+    </script>
+</body>
+
+</html>

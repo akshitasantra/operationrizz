@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Don't Fumble — Create Mission</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Oswald:wght@700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --red: #FF1A1A;
+            --orange: #FF6B00;
+            --yellow: #FFD600;
+            --green: #00FF88;
+            --bg: #0a0a0a;
+            --surface: #111;
+            --border: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated scanlines */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.015) 2px,
+                    rgba(255, 255, 255, 0.015) 4px);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Noise texture overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 998;
+            opacity: 0.4;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 20px;
+            position: relative;
+        }
+
+        .classified-stamp {
+            display: inline-block;
+            border: 4px solid var(--red);
+            color: var(--red);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            letter-spacing: 8px;
+            padding: 6px 20px;
+            margin-bottom: 20px;
+            transform: rotate(-2deg);
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.4);
+            animation: flicker 3s infinite;
+        }
+
+        @keyframes flicker {
+
+            0%,
+            95%,
+            100% {
+                opacity: 1;
+            }
+
+            96% {
+                opacity: 0.4;
+            }
+
+            97% {
+                opacity: 1;
+            }
+
+            98% {
+                opacity: 0.2;
+            }
+
+            99% {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(60px, 12vw, 120px);
+            line-height: 0.9;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #fff 0%, var(--yellow) 40%, var(--orange) 70%, var(--red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: none;
+            filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.5));
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #666;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+
+        .form-container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .field-group {
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0;
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            font-size: 16px;
+            padding: 14px 16px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 0 1px var(--orange), 0 0 20px rgba(255, 107, 0, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        /* Vibe selector */
+        .vibe-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .vibe-option {
+            position: relative;
+        }
+
+        .vibe-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .vibe-label {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 16px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vibe-label::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .vibe-option:nth-child(1) .vibe-label::before {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), transparent);
+        }
+
+        .vibe-option:nth-child(2) .vibe-label::before {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), transparent);
+        }
+
+        .vibe-option:nth-child(3) .vibe-label::before {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), transparent);
+        }
+
+        .vibe-option:nth-child(4) .vibe-label::before {
+            background: linear-gradient(135deg, rgba(255, 26, 26, 0.15), transparent);
+        }
+
+        .vibe-option:nth-child(5) .vibe-label::before {
+            background: linear-gradient(135deg, rgba(200, 100, 255, 0.15), transparent);
+        }
+
+        .vibe-option input:checked+.vibe-label {
+            border-color: var(--orange);
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .vibe-option input:checked+.vibe-label::before {
+            opacity: 1;
+        }
+
+        .vibe-emoji {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .vibe-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .vibe-desc {
+            font-size: 10px;
+            color: #555;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 3D Button */
+        .btn-generate {
+            width: 100%;
+            margin-top: 36px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            background: none;
+            outline: none;
+            position: relative;
+        }
+
+        .btn-inner {
+            display: block;
+            background: linear-gradient(135deg, #FF6B00 0%, #FF1A1A 50%, #CC0000 100%);
+            color: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 4px;
+            padding: 22px 40px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.1s;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 8px 0 #7a0000,
+                0 12px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .btn-generate:hover .btn-inner {
+            transform: translateY(3px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 5px 0 #7a0000,
+                0 8px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-generate:active .btn-inner {
+            transform: translateY(8px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0px 0 #7a0000,
+                0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-generate:hover .btn-inner::after {
+            content: ' ';
+        }
+
+        /* Output section */
+        .output-box {
+            display: none;
+            margin-top: 30px;
+            border: 2px solid var(--green);
+            padding: 24px;
+            background: rgba(0, 255, 136, 0.04);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .output-box.visible {
+            display: block;
+        }
+
+        .output-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--green);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .link-display {
+            background: #000;
+            border: 1px solid #333;
+            padding: 12px 16px;
+            font-size: 13px;
+            word-break: break-all;
+            color: var(--yellow);
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .link-display:hover {
+            border-color: var(--yellow);
+        }
+
+        .copy-btn {
+            background: var(--green);
+            color: #000;
+            border: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 2px;
+            padding: 12px 30px;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.15s;
+        }
+
+        .copy-btn:hover {
+            opacity: 0.85;
+        }
+
+        .meme-decoration {
+            position: fixed;
+            pointer-events: none;
+            font-size: 80px;
+            opacity: 0.05;
+            user-select: none;
+        }
+
+        .meme-decoration:nth-child(1) {
+            top: 10%;
+            left: -2%;
+            transform: rotate(-15deg);
+        }
+
+        .meme-decoration:nth-child(2) {
+            top: 60%;
+            right: -2%;
+            transform: rotate(10deg);
+        }
+
+        .meme-decoration:nth-child(3) {
+            bottom: 10%;
+            left: 5%;
+            transform: rotate(5deg);
+            font-size: 60px;
+        }
+
+        .warning-text {
+            font-size: 10px;
+            color: #333;
+            text-align: center;
+            margin-top: 16px;
+            letter-spacing: 1px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        .section-header {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 3px;
+            color: #fff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header::after {
+            content: '';
+            flex: 1;
+            border-top: 1px solid var(--border);
+        }
+
+        .threat-preview {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .threat-badge {
+            padding: 6px 12px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .threat-badge.green {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--green);
+            color: var(--green);
+        }
+
+        .threat-badge.yellow {
+            background: rgba(255, 214, 0, 0.1);
+            border: 1px solid var(--yellow);
+            color: var(--yellow);
+        }
+
+        .threat-badge.orange {
+            background: rgba(255, 107, 0, 0.1);
+            border: 1px solid var(--orange);
+            color: var(--orange);
+        }
+
+        .threat-badge.red {
+            background: rgba(255, 26, 26, 0.1);
+            border: 1px solid var(--red);
+            color: var(--red);
+            animation: pulse-red 1s infinite;
+        }
+
+        @keyframes pulse-red {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(255, 26, 26, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 15px rgba(255, 26, 26, 0.7);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <div class="classified-stamp">⚠ CLASSIFIED ⚠</div>
+        <h1>DON'T<br>FUMBLE</h1>
+    </div>
+
+    <div class="form-container">
+
+        <div class="section-header">01 / Target Identification</div>
+
+        <div class="field-group">
+            <label>Agent Codename (Their Name)</label>
+            <input type="text" id="recipientName"
+                placeholder="e.g. Jason, Marcus, Tyler..." maxlength="40" />
+        </div>
+
+        <div class="field-group">
+            <label>Hours Until Fumble</label>
+            <input type="number" id="hours" placeholder="e.g. 18" min="1"
+                max="999" />
+        </div>
+
+        <div class="field-group">
+            <label>Operation Location (City)</label>
+            <input type="text" id="city"
+                placeholder="e.g. Houston, Miami, New York..." maxlength="60" />
+        </div>
+
+    
+        <hr class="divider" />
+        <div class="section-header">02 / Custom Intel</div>
+
+        <div class="field-group">
+            <label>Secret Message (Optional)</label>
+            <textarea id="customMsg"
+                placeholder="Add any specific context... inside jokes, what you've been hinting at, why they're in trouble..."></textarea>
+        </div>
+
+        <div class="threat-preview">
+            <span class="threat-badge green">STABLE</span>
+            <span class="threat-badge yellow">CONCERNING</span>
+            <span class="threat-badge orange">CRITICAL</span>
+            <span class="threat-badge red">YOU'RE BLOCKED BUDDY</span>
+        </div>
+
+        <button class="btn-generate" onclick="generateMission()">
+            <span class="btn-inner">Generate Mission</span>
+        </button>
+
+        <div class="output-box" id="outputBox">
+            <div class="output-label"> Mission Link Generated: Send This To
+                Them</div>
+            <div class="link-display" id="generatedLink" onclick="copyLink()">
+                Click to copy...</div>
+            <button class="copy-btn" onclick="copyLink()">COPY MISSION
+                LINK</button>
+            <p class="warning-text">⚠ This message will self-destruct after
+                completion · Probably not but sounds cool</p>
+        </div>
+
+        <p class="warning-text" style="margin-top: 30px;">By generating this
+            mission you agree that any fumbling that occurs is 100% their fault.
+        </p>
+
+    </div>
+
+    <script>
+        function generateMission() {
+            const name = document.getElementById('recipientName').value.trim();
+            const hours = document.getElementById('hours').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const msg = document.getElementById('customMsg').value.trim();
+            const vibe = document.querySelector('input[name="vibe"]:checked')?.value || 'surprise';
+
+            if (!name || !hours || !city) {
+                alert('⚠ MISSION INCOMPLETE: Fill in name, hours, and city before deploying.');
+                return;
+            }
+
+            // Build the receiver URL with query params
+            // In production replace with your actual receiver page URL
+            const base = window.location.origin + '/receiver.html';
+            const params = new URLSearchParams({
+                n: name,
+                h: hours,
+                c: city,
+                v: vibe,
+                m: msg
+            });
+
+            const fullURL = `${base}?${params.toString()}`;
+            document.getElementById('generatedLink').textContent = fullURL;
+            const box = document.getElementById('outputBox');
+            box.classList.add('visible');
+            box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function copyLink() {
+            const text = document.getElementById('generatedLink').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'COPIED! NOW SEND IT.';
+                setTimeout(() => { btn.textContent = 'COPY MISSION LINK'; }, 2500);
+            });
+        }
+    </script>
+</body>
+
+</html>
