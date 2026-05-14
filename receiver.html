@@ -160,6 +160,26 @@
         }
 
         /* ============ MAIN CONTENT ============ */
+        #tom-cruise {
+            position: fixed;
+            right: 18px;
+            width: 80px;
+            opacity: 0.88;
+            z-index: 500;
+            pointer-events: none;
+            filter: drop-shadow(0 0 12px rgba(255,107,0,0.5));
+            animation: tomSlide 8s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        @keyframes tomSlide {
+            0%   { top: 10vh;  transform: rotate(-4deg) scaleX(-1); }
+            45%  { top: 75vh;  transform: rotate(4deg)  scaleX(-1); }
+            50%  { top: 75vh;  transform: rotate(4deg)  scaleX(1);  }
+            95%  { top: 10vh;  transform: rotate(-4deg) scaleX(1);  }
+            100% { top: 10vh;  transform: rotate(-4deg) scaleX(-1); }
+        }
+
         #mainContent {
             opacity: 0;
             transition: opacity 0.8s ease;
@@ -887,6 +907,7 @@
 </head>
 
 <body>
+    <img id="tom-cruise" src="assets/tom-cruise.png" alt="Agent Tom" />
     <!-- INTRO SCREEN -->
     <div id="introScreen">
         <div class="intro-classified">CONFIDENTIAL</div>
@@ -927,7 +948,17 @@
                 <div class="custom-msg-label">Incoming Intel from HQ</div>
                 <div class="custom-msg-text" id="customMsgText"></div>
             </div>
-            
+            <!-- BADDIE PHOTO -->
+            <div class="baddie-card" id="baddieCard"
+                style="display:none; margin-bottom:30px; text-align:center;">
+                <div
+                    style="font-size:9px; letter-spacing:3px; color:var(--red); text-transform:uppercase; margin-bottom:12px;">
+                    DO NOT FUMBLE THIS BADDIE
+                </div>
+                <img id="baddieImg" src="" alt="Intel"
+                    style="max-width:100%; max-height:340px; object-fit:cover;
+                    border:2px solid var(--red); box-shadow:0 0 40px rgba(255,26,26,0.3);" />
+            </div>
             <!-- PROBABILITY METER -->
             <div class="section-title">Bag Security</div>
             <div class="prob-card">
@@ -1025,7 +1056,9 @@
     <!-- ABORT MODAL -->
     <div class="modal-overlay" id="abortModal" onclick="closeAbortModal(event)">
         <div class="modal-card">
-            <span class="modal-emoji"></span>
+            <img src="assets/fumble.gif" alt="The Fumble" style="width:100%; max-height:200px; object-fit:cover;
+                border:2px solid var(--red); margin-bottom:20px;
+                box-shadow:0 0 30px rgba(255,26,26,0.4);" />
             <div class="modal-title">ABORT?</div>
             <p class="modal-text">
                 You're genuinely considering not going on a date with someone
@@ -1041,12 +1074,7 @@
         </div>
     </div>
 
-    <!-- BACKGROUND AUDIO (optional - uncomment to add) -->
-    <!--
-<audio id="bgAudio" loop autoplay>
-  <source src="https://your-cdn.com/mission-theme.mp3" type="audio/mpeg"/>
-</audio>
--->
+    
 
     <script>
         // ─── Parse URL Params ───────────────────────────────────────
@@ -1061,6 +1089,12 @@
         document.getElementById('introAgentLine').textContent = `Agent ${recipientName}…`;
 
         setTimeout(() => {
+            // Baddie photo
+            const photoB64 = params.get('photo');
+            if (photoB64) {
+                document.getElementById('baddieImg').src = 'data:image/jpeg;base64,' + photoB64;
+                document.getElementById('baddieCard').style.display = 'block';
+            }
             document.getElementById('heroName').textContent = recipientName.toUpperCase();
             document.getElementById('introScreen').classList.add('hidden');
             setTimeout(() => {
@@ -1172,6 +1206,41 @@
                 document.getElementById('abortModal').classList.remove('visible');
             }
         }
+    </script>
+    <!-- Background audio: attempts autoplay -->
+    <audio id="bgAudio" src="assets/Mission Impossible Theme (Full Theme) 4.mp3" loop preload="auto"></audio>
+    <script>
+        (function() {
+            const audio = document.getElementById('bgAudio');
+            const btn = document.getElementById('bgAudioBtn');
+
+            // Try autoplay
+            audio.play().then(() => {
+                // playing
+                btn.style.display = 'none';
+            }).catch(() => {
+                // Autoplay blocked: show play button
+                btn.style.display = 'inline-block';
+            });
+
+            // Toggle play/pause on button click
+            btn.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        btn.textContent = '⏸ Pause Music';
+                    }).catch(() => {
+                        // ignore
+                    });
+                } else {
+                    audio.pause();
+                    btn.textContent = '▶ Play Music';
+                }
+            });
+
+            // Update button text when audio ends or plays
+            audio.addEventListener('play', () => btn.textContent = '⏸ Pause Music');
+            audio.addEventListener('pause', () => btn.textContent = '▶ Play Music');
+        })();
     </script>
 </body>
 

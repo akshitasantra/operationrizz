@@ -534,6 +534,16 @@
                 placeholder="Add any specific context... inside jokes, what you've been hinting at, why they're in trouble..."></textarea>
         </div>
 
+        <div class="field-group">
+            <label>Drop a Baddie Photo (Optional)</label>
+            <input type="file" id="baddiePhoto" accept="image/*" style="width:100%; background:var(--surface); border:1px solid var(--border);
+                color:#fff; font-family:'Space Mono',monospace; font-size:13px; padding:14px 16px;
+                cursor:pointer; outline:none;" />
+            <p style="font-size:10px; color:#444; margin-top:6px; letter-spacing:1px;">
+                This will appear on their mission briefing page. Choose wisely.
+            </p>
+        </div>
+
         <button class="btn-generate" onclick="generateMission()">
             <span class="btn-inner">Generate Mission</span>
         </button>
@@ -562,28 +572,49 @@
             const city = document.getElementById('city').value.trim();
             const msg = document.getElementById('customMsg').value.trim();
             const vibe = document.querySelector('input[name="vibe"]:checked')?.value || 'surprise';
+            const fileInput = document.getElementById('baddiePhoto');
 
             if (!name || !hours || !city) {
                 alert('⚠ MISSION INCOMPLETE: Fill in name, hours, and city before deploying.');
                 return;
             }
 
-            // Build the receiver URL with query params
-            // In production replace with your actual receiver page URL
-            const base = window.location.href.replace('sender.html', '') + 'receiver.html';
-            const params = new URLSearchParams({
-                n: name,
-                h: hours,
-                c: city,
-                v: vibe,
-                m: msg
-            });
+            const buildLink = (photoParam) => {
+                const base = window.location.href.replace('sender.html', '') + 'receiver.html';
+                const params = new URLSearchParams({ n: name, h: hours, c: city, v: vibe, m: msg });
+                if (photoParam) params.set('photo', photoParam);
+                const fullURL = `${base}?${params.toString()}`;
+                document.getElementById('generatedLink').textContent = fullURL;
+                const box = document.getElementById('outputBox');
+                box.classList.add('visible');
+                box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
 
-            const fullURL = `${base}?${params.toString()}`;
-            document.getElementById('generatedLink').textContent = fullURL;
-            const box = document.getElementById('outputBox');
-            box.classList.add('visible');
-            box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                // Resize + compress before encoding so the URL stays manageable
+                const img = new Image();
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX = 400; // max dimension in px
+                        const ratio = Math.min(MAX / img.width, MAX / img.height);
+                        canvas.width = Math.round(img.width * ratio);
+                        canvas.height = Math.round(img.height * ratio);
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                        // quality 0.6 keeps file small enough for a URL
+                        const compressed = canvas.toDataURL('image/jpeg', 0.6);
+                        // Strip the data:image/jpeg;base64, prefix — we'll re-add it on the receiver
+                        const b64 = compressed.split(',')[1];
+                        buildLink(b64);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                buildLink(null);
+            }
         }
 
         function copyLink() {
