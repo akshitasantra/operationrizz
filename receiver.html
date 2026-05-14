@@ -1177,6 +1177,10 @@
     </script>
     <!-- Background audio: attempts autoplay -->
     <audio id="bgAudio" src="assets/Mission Impossible Theme (Full Theme) 4.mp3" loop preload="auto"></audio>
+    <button id="bgAudioBtn" aria-label="Play background music"
+        style="position:fixed;left:18px;bottom:18px;z-index:10000;padding:10px 14px;background:var(--red);color:#fff;border:none;border-radius:8px;display:none;box-shadow:0 6px 18px rgba(0,0,0,0.5);">
+        ▶ Play Music
+    </button>
     <script>
         (function() {
             const audio = document.getElementById('bgAudio');
@@ -1185,29 +1189,31 @@
             // Try autoplay
             audio.play().then(() => {
                 // playing
-                btn.style.display = 'none';
+                if (btn) btn.style.display = 'none';
             }).catch(() => {
                 // Autoplay blocked: show play button
-                btn.style.display = 'inline-block';
+                if (btn) btn.style.display = 'inline-block';
             });
 
             // Toggle play/pause on button click
-            btn.addEventListener('click', () => {
-                if (audio.paused) {
-                    audio.play().then(() => {
-                        btn.textContent = '⏸ Pause Music';
-                    }).catch(() => {
-                        // ignore
-                    });
-                } else {
-                    audio.pause();
-                    btn.textContent = '▶ Play Music';
-                }
-            });
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    if (audio.paused) {
+                        audio.play().then(() => {
+                            btn.textContent = '⏸ Pause Music';
+                        }).catch(() => {
+                            // ignore
+                        });
+                    } else {
+                        audio.pause();
+                        btn.textContent = '▶ Play Music';
+                    }
+                });
+            }
 
             // Update button text when audio ends or plays
-            audio.addEventListener('play', () => btn.textContent = '⏸ Pause Music');
-            audio.addEventListener('pause', () => btn.textContent = '▶ Play Music');
+            audio.addEventListener('play', () => { if (btn) btn.textContent = '⏸ Pause Music'; });
+            audio.addEventListener('pause', () => { if (btn) btn.textContent = '▶ Play Music'; });
         })();
     </script>
 </body>
