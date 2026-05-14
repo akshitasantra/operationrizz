@@ -1051,18 +1051,13 @@
     <!-- ABORT MODAL -->
     <div class="modal-overlay" id="abortModal" onclick="closeAbortModal(event)">
         <div class="modal-card">
-            <span class="modal-emoji">🤡</span>
+            <span class="modal-emoji"></span>
             <div class="modal-title">ABORT?</div>
             <p class="modal-text">
                 You're genuinely considering not going on a date with someone
                 who likes you.<br>
                 Let that sink in for a second.
             </p>
-            <div class="modal-quote">
-                "Bro just stayed home. Said he was 'tired'. She posted a story
-                within 45 minutes. He hasn't recovered."<br>
-                — Anonymous Reddit thread, r/Wellthatsucks
-            </div>
             <p class="modal-text" style="font-size: 11px; color: #333;">
                 There is no abort button. There is only execution or fumble.
                 Choose wisely.
@@ -1130,42 +1125,6 @@
             totalSeconds--;
         }
 
-        // ─── Threat Level ────────────────────────────────────────────
-        function setThreatLevel() {
-            let level, statusText, statusColor;
-
-            if (vibe === 'ice') {
-                level = 4; statusText = "⚠ She's Texting Her Friends About You Right Now";
-                statusColor = 'var(--red)';
-            } else if (vibe === 'classy') {
-                level = 1; statusText = '✅ Stable — But Don\'t Get Comfortable';
-                statusColor = 'var(--green)';
-            } else if (vibe === 'cheap') {
-                level = 3; statusText = '🔶 Critical — Budget Noted. Noted.';
-                statusColor = 'var(--orange)';
-            } else if (hoursUntil < 3) {
-                level = 4; statusText = '🚨 She\'s Texting Her Friends About You Right Now';
-                statusColor = 'var(--red)';
-            } else if (hoursUntil < 12) {
-                level = 3; statusText = '🔶 Critical — Minimal Time Remaining';
-                statusColor = 'var(--orange)';
-            } else if (hoursUntil < 24) {
-                level = 2; statusText = '⚡ Concerning — Do Not Delay';
-                statusColor = 'var(--yellow)';
-            } else {
-                level = 1; statusText = '✅ Stable — You Have Time. Use It.';
-                statusColor = 'var(--green)';
-            }
-
-            for (let i = 1; i <= level; i++) {
-                document.getElementById(`t${i}`).classList.add('active');
-            }
-
-            const ts = document.getElementById('threatStatus');
-            ts.textContent = statusText;
-            ts.style.color = statusColor;
-        }
-
         // ─── Probability Meter ───────────────────────────────────────
         let baseProbability = 12;
         let bonusProb = 0;
@@ -1205,18 +1164,6 @@
 
             currentProb = baseProbability;
             updateProbDisplay(currentProb, caption || '');
-        }
-
-        // ─── Vibe-based copy ─────────────────────────────────────────
-        function setVibeCopy() {
-            const riskTexts = {
-                classy: 'Execute With Class. Don\'t Be Boring.',
-                fun: 'Make Her Laugh. Or Else.',
-                cheap: 'Budget Has Been Noted by Intelligence.',
-                ice: 'You Are Already In Trouble. Move Quickly.',
-                surprise: 'You Are At Severe Risk Of Fumbling.'
-            };
-            document.getElementById('riskText').textContent = riskTexts[vibe] || riskTexts.surprise;
         }
 
         // ─── City / Maps ──────────────────────────────────────────────
