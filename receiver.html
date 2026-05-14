@@ -1058,9 +1058,9 @@
 
         setTimeout(() => {
             // Baddie photo
-            const photoB64 = params.get('photo');
-            if (photoB64) {
-                document.getElementById('baddieImg').src = 'data:image/jpeg;base64,' + photoB64;
+            const photoUrl = params.get('photo');
+            if (photoUrl) {
+                document.getElementById('baddieImg').src = decodeURIComponent(photoUrl);
                 document.getElementById('baddieCard').style.display = 'block';
             }
             document.getElementById('heroName').textContent = recipientName.toUpperCase();
