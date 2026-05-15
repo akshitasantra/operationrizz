@@ -226,9 +226,8 @@
         /* BUTTONS */
 
         .btn-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            display: flex;
+            justify-content: center;
             margin-top: 38px;
         }
 
@@ -462,13 +461,6 @@
                     Generate Mission
                 </div>
             </button>
-
-            <button class="btn btn-secondary" onclick="copyLink()">
-                <div class="btn-inner">
-                    Copy Link
-                </div>
-            </button>
-
         </div>
 
         <div class="output-box" id="outputBox">
