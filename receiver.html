@@ -6,14 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DON'T FUMBLE</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Oswald:wght@700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
         rel="stylesheet" />
     <style>
         :root {
             --red: #FF1A1A;
-            --orange: #FF6B00;
-            --yellow: #FFD600;
-            --green: #00FF88;
+            --dark-red: #7a0000;
             --bg: #060606;
             --surface: #0e0e0e;
         }
@@ -27,7 +25,7 @@
         body {
             background: var(--bg);
             color: #fff;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Share Tech Mono', monospace;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -37,9 +35,13 @@
             content: '';
             position: fixed;
             inset: 0;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px,
-                    rgba(255, 255, 255, 0.012) 2px,
-                    rgba(255, 255, 255, 0.012) 4px);
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.02) 2px,
+                rgba(255, 255, 255, 0.02) 4px
+            );
             pointer-events: none;
             z-index: 9999;
         }
@@ -69,7 +71,7 @@
         }
 
         .intro-classified {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: clamp(40px, 10vw, 80px);
             letter-spacing: 12px;
             color: var(--red);
@@ -109,7 +111,7 @@
         }
 
         .intro-agent {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: clamp(22px, 5vw, 40px);
             letter-spacing: 6px;
             color: #fff;
@@ -121,7 +123,7 @@
 
         .intro-sub {
             font-size: 12px;
-            color: #555;
+            color: #fff;
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0;
@@ -172,7 +174,11 @@
         .vignette {
             position: fixed;
             inset: 0;
-            background: radial-gradient(ellipse at center, transparent 60%, rgba(255, 26, 26, 0.08) 100%);
+            background: radial-gradient(
+                ellipse at center,
+                transparent 60%,
+                rgba(255, 26, 26, 0.08) 100%
+            );
             pointer-events: none;
             z-index: 100;
         }
@@ -216,25 +222,18 @@
         .agent-label {
             font-size: 12px;
             letter-spacing: 5px;
-            color: #555;
+            color: #fff;
             text-transform: uppercase;
             margin-bottom: 10px;
         }
 
         .agent-name {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(50px, 14vw, 130px);
-            line-height: 0.85;
-            letter-spacing: -2px;
-            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: block;
+            color: var(--red);
+            text-shadow: 0 0 25px rgba(255, 26, 26, 0.45);
         }
 
         .risk-text {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family : 'Share Tech Mono', monospace;
             font-size: clamp(16px, 4vw, 28px);
             letter-spacing: 4px;
             color: var(--red);
@@ -263,7 +262,7 @@
         }
 
         .countdown-display {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: clamp(50px, 16vw, 130px);
             letter-spacing: 4px;
             color: var(--red);
@@ -289,7 +288,7 @@
 
         .countdown-sub {
             font-size: 11px;
-            color: #444;
+            color: #fff;
             letter-spacing: 3px;
             margin-top: 8px;
             text-transform: uppercase;
@@ -303,10 +302,10 @@
         }
 
         .section-title {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 26px;
             letter-spacing: 5px;
-            color: var(--orange);
+            color: var(--red);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -317,7 +316,8 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: linear-gradient(to right, var(--orange), transparent);
+            background: var(--red);
+            opacity: 0.3;
         }
 
         /* THREAT METER */
@@ -353,24 +353,12 @@
             opacity: 1;
         }
 
-        .threat-segment:nth-child(1) .bar {
-            background: var(--green);
-            box-shadow: 0 0 20px var(--green);
-        }
-
-        .threat-segment:nth-child(2) .bar {
-            background: var(--yellow);
-            box-shadow: 0 0 20px var(--yellow);
-        }
-
-        .threat-segment:nth-child(3) .bar {
-            background: var(--orange);
-            box-shadow: 0 0 20px var(--orange);
+        .threat-segment .bar {
+            background: var(--red);
+            box-shadow: 0 0 20px var(--red);
         }
 
         .threat-segment:nth-child(4) .bar {
-            background: var(--red);
-            box-shadow: 0 0 20px var(--red);
             animation: segPulse 0.7s ease-in-out infinite;
         }
 
@@ -407,7 +395,7 @@
             font-size: 9px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: #444;
+            color: #fff;
         }
 
         .threat-labels span {
@@ -416,7 +404,7 @@
         }
 
         .threat-status {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 32px;
             letter-spacing: 3px;
             margin-top: 12px;
@@ -434,7 +422,7 @@
         .prob-label {
             font-size: 11px;
             letter-spacing: 3px;
-            color: #555;
+            color: #fff;
             text-transform: uppercase;
             margin-bottom: 12px;
         }
@@ -449,26 +437,17 @@
 
         .prob-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--red), var(--orange), var(--yellow));
-            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            box-shadow: 4px 0 20px rgba(255, 214, 0, 0.5);
+            background: var(--red);
         }
 
         .prob-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 60px;
-            letter-spacing: 2px;
-            line-height: 1;
-            color: var(--yellow);
-            text-shadow: 0 0 30px rgba(255, 214, 0, 0.5);
-            margin-top: 10px;
-            transition: all 0.4s;
+            color: var(--red);
+            text-shadow: 0 0 30px rgba(255, 26, 26, 0.5);
         }
 
         .prob-caption {
             font-size: 11px;
-            color: #444;
+            color: #fff;
             letter-spacing: 2px;
             margin-top: 6px;
         }
@@ -502,16 +481,16 @@
             top: 0;
             bottom: 0;
             width: 3px;
-            background: #333;
+            background: #fff;
             transition: background 0.3s;
         }
 
         .check-item:hover {
-            border-color: #333;
+            border-color: #fff;
         }
 
         .check-item:hover::before {
-            background: var(--orange);
+            background: var(--red);
         }
 
         .check-item.done {
@@ -520,13 +499,13 @@
         }
 
         .check-item.done::before {
-            background: var(--green);
+            background: var(--red);
         }
 
         .check-box {
             width: 22px;
             height: 22px;
-            border: 2px solid #333;
+            border: 2px solid #fff;
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -548,7 +527,7 @@
 
         .check-sub {
             font-size: 10px;
-            color: #444;
+            color: #fff;
             margin-top: 2px;
             letter-spacing: 1px;
         }
@@ -579,7 +558,7 @@
             justify-content: center;
             gap: 6px;
             padding: 24px 16px;
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 20px;
             letter-spacing: 2px;
             text-align: center;
@@ -594,40 +573,40 @@
 
         /* Maps Button - Green */
         .btn-maps .danger-inner {
-            background: linear-gradient(135deg, #00b360, #006630);
+            background: var(--red);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 6px 0 #003018,
+                0 6px 0 #4d0000,
                 0 10px 20px rgba(0, 0, 0, 0.6);
         }
 
         .btn-maps:hover .danger-inner {
             transform: translateY(3px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #003018, 0 6px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #4d0000, 0 6px 12px rgba(0, 0, 0, 0.5);
         }
 
         .btn-maps:active .danger-inner {
             transform: translateY(6px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #003018, 0 2px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #4d0000, 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
         /* Apology button - Orange */
         .btn-apology .danger-inner {
-            background: linear-gradient(135deg, #FF8C00, #CC5500);
+            background: var(--red);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 6px 0 #662800,
+                0 6px 0 #4d0000,
                 0 10px 20px rgba(0, 0, 0, 0.6);
         }
 
         .btn-apology:hover .danger-inner {
             transform: translateY(3px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #662800, 0 6px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #4d0000, 0 6px 12px rgba(0, 0, 0, 0.5);
         }
 
         .btn-apology:active .danger-inner {
             transform: translateY(6px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #662800, 0 2px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #4d0000, 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
         /* Abort - Red */
@@ -636,7 +615,7 @@
         }
 
         .btn-abort .danger-inner {
-            background: linear-gradient(135deg, #FF1A1A, #990000);
+            background: var(--red);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.15),
                 0 6px 0 #4d0000,
@@ -662,7 +641,7 @@
             font-size: 11px;
             color: rgba(255, 255, 255, 0.6);
             letter-spacing: 2px;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Share Tech Mono', monospace;
             font-weight: 400;
         }
 
@@ -675,7 +654,7 @@
         }
 
         .consequences-title {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 20px;
             letter-spacing: 3px;
             color: var(--red);
@@ -694,7 +673,7 @@
             align-items: flex-start;
             gap: 12px;
             font-size: 13px;
-            color: #888;
+            color: #fff;
             padding: 8px 0;
             border-bottom: 1px solid #111;
         }
@@ -709,20 +688,20 @@
         }
 
         .consequence-text {
-            color: #bbb;
+            color: #fff;
         }
 
         .consequence-sub {
             font-size: 10px;
-            color: #444;
+            color: #fff;
             margin-top: 2px;
             letter-spacing: 1px;
         }
 
         /* Custom message banner */
         .custom-msg-card {
-            background: rgba(255, 214, 0, 0.05);
-            border: 1px solid rgba(255, 214, 0, 0.2);
+            background: rgba(255, 26, 26, 0.05);
+            border: 1px solid rgba(255, 26, 26, 0.2);
             padding: 18px 20px;
             margin-bottom: 30px;
             display: none;
@@ -735,14 +714,14 @@
         .custom-msg-label {
             font-size: 9px;
             letter-spacing: 3px;
-            color: var(--yellow);
+            color: var(--red);
             text-transform: uppercase;
             margin-bottom: 8px;
         }
 
         .custom-msg-text {
             font-size: 14px;
-            color: #ddd;
+            color: #fff;
             font-style: italic;
             line-height: 1.6;
         }
@@ -795,7 +774,7 @@
         .footer-note {
             text-align: center;
             font-size: 10px;
-            color: #222;
+            color: #fff;
             letter-spacing: 2px;
             padding: 20px;
             text-transform: uppercase;
@@ -839,7 +818,7 @@
         }
 
         .modal-title {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 48px;
             letter-spacing: 3px;
             color: var(--red);
@@ -848,7 +827,7 @@
 
         .modal-text {
             font-size: 13px;
-            color: #666;
+            color: #fff;
             line-height: 1.7;
             margin-bottom: 24px;
             letter-spacing: 0.5px;
@@ -856,8 +835,8 @@
 
         .modal-quote {
             font-size: 12px;
-            color: #333;
-            border-left: 2px solid #222;
+            color: #fff;
+            border-left: 2px solid #fff;
             padding: 10px 16px;
             text-align: left;
             font-style: italic;
@@ -867,9 +846,9 @@
 
         .modal-close {
             background: #111;
-            color: #555;
-            border: 1px solid #222;
-            font-family: 'Space Mono', monospace;
+            color: #fff;
+            border: 1px solid #fff;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 11px;
             letter-spacing: 2px;
             padding: 12px 24px;
@@ -880,8 +859,8 @@
         }
 
         .modal-close:hover {
-            border-color: #444;
-            color: #888;
+            border-color: #fff;
+            color: #fff;
         }
     </style>
 </head>
@@ -967,7 +946,7 @@
 
                 <button class="danger-btn btn-abort"
                     onmouseover="boostProb(-30, 'You are actually considering this. Incredible.')"
-                    onmouseout="restoreProb()" onclick="showAbortModal()">
+                    onmouseout="restoreProb()" onclick="abortMission()">
                     <div class="danger-inner">
                         <span class="btn-icon"></span>
                         ABORT MISSION
@@ -1032,10 +1011,6 @@
                 You're genuinely considering not going on a date with someone
                 who likes you.<br>
                 Let that sink in for a second.
-            </p>
-            <p class="modal-text" style="font-size: 11px; color: #333;">
-                There is no abort button. There is only execution or fumble.
-                Choose wisely.
             </p>
             <button class="modal-close" onclick="closeAbortModal()">← Return to
                 Mission (Good Choice)</button>
@@ -1155,6 +1130,15 @@
         }
 
         // ─── Abort Modal ─────────────────────────────────────────────
+        function abortMission() {
+            window.open(
+                'https://medium.com/hello-love/how-do-i-stop-being-an-incel-56353d59f2d8',
+                '_blank'
+            );
+
+            showAbortModal();
+        }
+
         function showAbortModal() {
             document.getElementById('abortModal').classList.add('visible');
         }

@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Don't Fumble — Create Mission</title>
+    <title>Don't Fumble: Create Mission</title>
+
     <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Oswald:wght@700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
         rel="stylesheet" />
+
     <style>
         :root {
-            --red: #FF1A1A;
-            --orange: #FF6B00;
-            --yellow: #FFD600;
-            --green: #00FF88;
-            --bg: #0a0a0a;
-            --surface: #111;
+            --red: #ff1a1a;
+            --dark-red: #990000;
+            --bg: #050505;
+            --surface: #101010;
             --border: #2a2a2a;
         }
 
@@ -28,12 +28,12 @@
         body {
             background: var(--bg);
             color: #fff;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Share Tech Mono', monospace;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Animated scanlines */
+        /* Scanlines */
         body::before {
             content: '';
             position: fixed;
@@ -47,7 +47,7 @@
             z-index: 999;
         }
 
-        /* Noise texture overlay */
+        /* Noise overlay */
         body::after {
             content: '';
             position: fixed;
@@ -66,11 +66,10 @@
 
         .classified-stamp {
             display: inline-block;
-            border: 4px solid var(--red);
+            border: 3px solid var(--red);
             color: var(--red);
-            font-family: 'Bebas Neue', sans-serif;
             font-size: 14px;
-            letter-spacing: 8px;
+            letter-spacing: 6px;
             padding: 6px 20px;
             margin-bottom: 20px;
             transform: rotate(-2deg);
@@ -104,17 +103,12 @@
         }
 
         h1 {
-            font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(60px, 12vw, 120px);
             line-height: 0.9;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #fff 0%, var(--yellow) 40%, var(--orange) 70%, var(--red) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: 4px;
+            color: var(--red);
             margin-bottom: 10px;
-            text-shadow: none;
-            filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.5));
+            text-shadow: 0 0 30px rgba(255, 26, 26, 0.5);
         }
 
         .subtitle {
@@ -143,7 +137,7 @@
             font-size: 11px;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--orange);
+            color: var(--red);
             margin-bottom: 8px;
             font-weight: 700;
         }
@@ -154,9 +148,8 @@
             width: 100%;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 0;
             color: #fff;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 16px;
             padding: 14px 16px;
             outline: none;
@@ -167,8 +160,9 @@
         input[type="text"]:focus,
         input[type="number"]:focus,
         textarea:focus {
-            border-color: var(--orange);
-            box-shadow: 0 0 0 1px var(--orange), 0 0 20px rgba(255, 107, 0, 0.15);
+            border-color: var(--red);
+            box-shadow: 0 0 0 1px var(--red),
+                0 0 20px rgba(255, 26, 26, 0.2);
         }
 
         textarea {
@@ -176,95 +170,8 @@
             min-height: 90px;
         }
 
-        /* Vibe selector */
-        .vibe-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        /* Button */
 
-        .vibe-option {
-            position: relative;
-        }
-
-        .vibe-option input {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .vibe-label {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 16px;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            transition: all 0.15s;
-            background: var(--surface);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .vibe-label::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .vibe-option:nth-child(1) .vibe-label::before {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), transparent);
-        }
-
-        .vibe-option:nth-child(2) .vibe-label::before {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), transparent);
-        }
-
-        .vibe-option:nth-child(3) .vibe-label::before {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), transparent);
-        }
-
-        .vibe-option:nth-child(4) .vibe-label::before {
-            background: linear-gradient(135deg, rgba(255, 26, 26, 0.15), transparent);
-        }
-
-        .vibe-option:nth-child(5) .vibe-label::before {
-            background: linear-gradient(135deg, rgba(200, 100, 255, 0.15), transparent);
-        }
-
-        .vibe-option input:checked+.vibe-label {
-            border-color: var(--orange);
-            box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
-        }
-
-        .vibe-option input:checked+.vibe-label::before {
-            opacity: 1;
-        }
-
-        .vibe-emoji {
-            font-size: 28px;
-            margin-bottom: 6px;
-        }
-
-        .vibe-name {
-            font-family: 'Oswald', sans-serif;
-            font-size: 15px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #fff;
-        }
-
-        .vibe-desc {
-            font-size: 10px;
-            color: #555;
-            margin-top: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        /* 3D Button */
         .btn-generate {
             width: 100%;
             margin-top: 36px;
@@ -278,30 +185,28 @@
 
         .btn-inner {
             display: block;
-            background: linear-gradient(135deg, #FF6B00 0%, #FF1A1A 50%, #CC0000 100%);
+            background: var(--red);
             color: #fff;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 36px;
+            font-size: 30px;
             letter-spacing: 4px;
             padding: 22px 40px;
             text-align: center;
             position: relative;
             z-index: 2;
             transition: transform 0.1s;
-            border-top: 2px solid rgba(255, 255, 255, 0.3);
-            border-left: 2px solid rgba(255, 255, 255, 0.2);
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 8px 0 #7a0000,
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 8px 0 var(--dark-red),
                 0 12px 20px rgba(0, 0, 0, 0.6);
         }
 
         .btn-generate:hover .btn-inner {
             transform: translateY(3px);
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 5px 0 #7a0000,
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 5px 0 var(--dark-red),
                 0 8px 15px rgba(0, 0, 0, 0.5);
         }
 
@@ -309,22 +214,19 @@
             transform: translateY(8px);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                0 0px 0 #7a0000,
+                0 0px 0 var(--dark-red),
                 0 3px 8px rgba(0, 0, 0, 0.4);
         }
 
-        .btn-generate:hover .btn-inner::after {
-            content: ' ';
-        }
+        /* Output */
 
-        /* Output section */
         .output-box {
             display: none;
             margin-top: 30px;
-            border: 2px solid var(--green);
+            border: 2px solid var(--red);
             padding: 24px;
-            background: rgba(0, 255, 136, 0.04);
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+            background: rgba(255, 26, 26, 0.04);
+            box-shadow: 0 0 30px rgba(255, 26, 26, 0.1);
             animation: slideIn 0.4s ease;
         }
 
@@ -347,7 +249,7 @@
         .output-label {
             font-size: 10px;
             letter-spacing: 3px;
-            color: var(--green);
+            color: var(--red);
             text-transform: uppercase;
             margin-bottom: 12px;
         }
@@ -358,21 +260,21 @@
             padding: 12px 16px;
             font-size: 13px;
             word-break: break-all;
-            color: var(--yellow);
+            color: var(--red);
             margin-bottom: 16px;
             cursor: pointer;
             transition: border-color 0.2s;
         }
 
         .link-display:hover {
-            border-color: var(--yellow);
+            border-color: var(--red);
         }
 
         .copy-btn {
-            background: var(--green);
-            color: #000;
+            background: var(--red);
+            color: #fff;
             border: none;
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 20px;
             letter-spacing: 2px;
             padding: 12px 30px;
@@ -385,36 +287,9 @@
             opacity: 0.85;
         }
 
-        .meme-decoration {
-            position: fixed;
-            pointer-events: none;
-            font-size: 80px;
-            opacity: 0.05;
-            user-select: none;
-        }
-
-        .meme-decoration:nth-child(1) {
-            top: 10%;
-            left: -2%;
-            transform: rotate(-15deg);
-        }
-
-        .meme-decoration:nth-child(2) {
-            top: 60%;
-            right: -2%;
-            transform: rotate(10deg);
-        }
-
-        .meme-decoration:nth-child(3) {
-            bottom: 10%;
-            left: 5%;
-            transform: rotate(5deg);
-            font-size: 60px;
-        }
-
         .warning-text {
             font-size: 10px;
-            color: #333;
+            color: #555;
             text-align: center;
             margin-top: 16px;
             letter-spacing: 1px;
@@ -427,10 +302,9 @@
         }
 
         .section-header {
-            font-family: 'Bebas Neue', sans-serif;
             font-size: 22px;
             letter-spacing: 3px;
-            color: #fff;
+            color: var(--red);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
@@ -441,6 +315,23 @@
             content: '';
             flex: 1;
             border-top: 1px solid var(--border);
+        }
+
+        /* Probability bar */
+        .probability-bar {
+            width: 100%;
+            height: 14px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .probability-fill {
+            width: 78%;
+            height: 100%;
+            background: var(--red);
+            box-shadow: 0 0 12px rgba(255, 26, 26, 0.5);
         }
 
         .threat-preview {
@@ -455,48 +346,15 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             font-weight: 700;
-        }
-
-        .threat-badge.green {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid var(--green);
-            color: var(--green);
-        }
-
-        .threat-badge.yellow {
-            background: rgba(255, 214, 0, 0.1);
-            border: 1px solid var(--yellow);
-            color: var(--yellow);
-        }
-
-        .threat-badge.orange {
-            background: rgba(255, 107, 0, 0.1);
-            border: 1px solid var(--orange);
-            color: var(--orange);
-        }
-
-        .threat-badge.red {
             background: rgba(255, 26, 26, 0.1);
             border: 1px solid var(--red);
             color: var(--red);
-            animation: pulse-red 1s infinite;
-        }
-
-        @keyframes pulse-red {
-
-            0%,
-            100% {
-                box-shadow: 0 0 5px rgba(255, 26, 26, 0.3);
-            }
-
-            50% {
-                box-shadow: 0 0 15px rgba(255, 26, 26, 0.7);
-            }
         }
     </style>
 </head>
 
 <body>
+
     <div class="hero">
         <div class="classified-stamp">⚠ CLASSIFIED ⚠</div>
         <h1>DON'T<br>FUMBLE</h1>
@@ -524,43 +382,61 @@
                 placeholder="e.g. Houston, Miami, New York..." maxlength="60" />
         </div>
 
-    
         <hr class="divider" />
+
         <div class="section-header">02 / Custom Intel</div>
 
         <div class="field-group">
             <label>Secret Message (Optional)</label>
             <textarea id="customMsg"
-                placeholder="Add any specific context... inside jokes, what you've been hinting at, why they're in trouble..."></textarea>
+                placeholder="Add any specific context..."></textarea>
         </div>
 
         <div class="field-group">
             <label>Drop a Baddie Photo (Optional)</label>
-            <input type="file" id="baddiePhoto" accept="image/*" style="width:100%; background:var(--surface); border:1px solid var(--border);
-                color:#fff; font-family:'Space Mono',monospace; font-size:13px; padding:14px 16px;
-                cursor:pointer; outline:none;" />
-            <p style="font-size:10px; color:#444; margin-top:6px; letter-spacing:1px;">
-                This will appear on their mission briefing page. Choose wisely.
+
+            <input type="file" id="baddiePhoto" accept="image/*" style="
+                width:100%;
+                background:var(--surface);
+                border:1px solid var(--border);
+                color:#fff;
+                font-family:'Share Tech Mono', monospace;
+                font-size:13px;
+                padding:14px 16px;
+                cursor:pointer;
+                outline:none;" />
+
+            <p
+                style="font-size:10px; color:#555; margin-top:6px; letter-spacing:1px;">
+                This will appear on their mission briefing page.
             </p>
         </div>
 
         <button class="btn-generate" onclick="generateMission()">
-            <span class="btn-inner">Generate Mission</span>
+            <span class="btn-inner">GENERATE MISSION</span>
         </button>
 
         <div class="output-box" id="outputBox">
-            <div class="output-label"> Mission Link Generated: Send This To
-                Them</div>
+            <div class="output-label">
+                Mission Link Generated
+            </div>
+
             <div class="link-display" id="generatedLink" onclick="copyLink()">
-                Click to copy...</div>
-            <button class="copy-btn" onclick="copyLink()">COPY MISSION
-                LINK</button>
-            <p class="warning-text">⚠ This message will self-destruct after
-                completion · Probably not but sounds cool</p>
+                Click to copy...
+            </div>
+
+            <button class="copy-btn" onclick="copyLink()">
+                COPY MISSION LINK
+            </button>
+
+            <p class="warning-text">
+                ⚠ This message will self-destruct after completion
+            </p>
         </div>
 
-        <p class="warning-text" style="margin-top: 30px;">By generating this
-            mission you agree that any fumbling that occurs is 100% their fault.
+        <p class="warning-text" style="margin-top: 30px;">
+            By generating this mission you agree that any fumbling that occurs
+            is 100% their fault.
         </p>
 
     </div>
@@ -571,32 +447,51 @@
             const hours = document.getElementById('hours').value.trim();
             const city = document.getElementById('city').value.trim();
             const msg = document.getElementById('customMsg').value.trim();
-            const vibe = document.querySelector('input[name="vibe"]:checked')?.value || 'surprise';
             const fileInput = document.getElementById('baddiePhoto');
 
             if (!name || !hours || !city) {
-                alert('⚠ MISSION INCOMPLETE: Fill in name, hours, and city before deploying.');
+                alert('⚠ MISSION INCOMPLETE');
                 return;
             }
 
             const buildLink = (photoParam) => {
                 const base = window.location.href.replace('sender.html', '') + 'receiver.html';
-                const params = new URLSearchParams({ n: name, h: hours, c: city, v: vibe, m: msg });
-                if (photoParam) params.set('photo', encodeURIComponent(photoParam));
+
+                const params = new URLSearchParams({
+                    n: name,
+                    h: hours,
+                    c: city,
+                    m: msg
+                });
+
+                if (photoParam) {
+                    params.set('photo', encodeURIComponent(photoParam));
+                }
+
                 const fullURL = `${base}?${params.toString()}`;
+
                 document.getElementById('generatedLink').textContent = fullURL;
+
                 const box = document.getElementById('outputBox');
+
                 box.classList.add('visible');
-                box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                box.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             };
 
             if (fileInput.files && fileInput.files[0]) {
+
                 const file = fileInput.files[0];
                 const formData = new FormData();
+
                 formData.append('image', file);
 
                 const btn = document.querySelector('.btn-inner');
-                btn.textContent = 'Uploading Photo...';
+
+                btn.textContent = 'UPLOADING PHOTO...';
 
                 fetch('https://api.imgbb.com/1/upload?key=e2a2abdb09ed461495fe679a8ca36d61', {
                     method: 'POST',
@@ -604,13 +499,14 @@
                 })
                     .then(r => r.json())
                     .then(data => {
-                        btn.textContent = 'Generate Mission';
+                        btn.textContent = 'GENERATE MISSION';
                         buildLink(data.data.url);
                     })
                     .catch(() => {
-                        btn.textContent = 'Generate Mission';
-                        buildLink(null); // fail gracefully, skip photo
+                        btn.textContent = 'GENERATE MISSION';
+                        buildLink(null);
                     });
+
             } else {
                 buildLink(null);
             }
@@ -618,13 +514,21 @@
 
         function copyLink() {
             const text = document.getElementById('generatedLink').textContent;
+
             navigator.clipboard.writeText(text).then(() => {
+
                 const btn = document.querySelector('.copy-btn');
-                btn.textContent = 'COPIED! NOW SEND IT.';
-                setTimeout(() => { btn.textContent = 'COPY MISSION LINK'; }, 2500);
+
+                btn.textContent = 'COPIED';
+
+                setTimeout(() => {
+                    btn.textContent = 'COPY MISSION LINK';
+                }, 2500);
+
             });
         }
     </script>
+
 </body>
 
 </html>
