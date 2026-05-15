@@ -9,11 +9,29 @@
         href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
         rel="stylesheet" />
     <style>
+        @font-face {
+            font-family: 'PrestigeElite';
+            src: local('Prestige Elite Std'), local('Prestige Elite');
+        }
+
         :root {
-            --red: #FF1A1A;
-            --dark-red: #7a0000;
-            --bg: #060606;
-            --surface: #0e0e0e;
+            --red: #ff1a1a;
+            --dark-red: #8b0000;
+
+            --navy: #202c4c;
+            --navy-dark: #151d33;
+
+            --green: #007130;
+            --green-dark: #00461d;
+
+            --cyan: #35d6ff;
+            --cyan-glow: rgba(53, 214, 255, 0.35);
+
+            --bg: #04070d;
+            --surface: #0d121c;
+            --surface-2: #131b28;
+            --border: #243047;
+            --text-dim: #7f8aa3;
         }
 
         * {
@@ -22,170 +40,55 @@
             box-sizing: border-box;
         }
 
-        body {
+        html {
             background: var(--bg);
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top, rgba(53, 214, 255, 0.08), transparent 30%),
+                linear-gradient(to bottom, #04070d, #050913);
             color: #fff;
             font-family: 'Share Tech Mono', monospace;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+            padding: 14px;
         }
 
-        /* Scanlines */
+        /* CYAN BORDER */
         body::before {
             content: '';
             position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(255, 255, 255, 0.02) 2px,
-                rgba(255, 255, 255, 0.02) 4px
-            );
+            inset: 10px;
+            border: 2px solid var(--cyan);
+            box-shadow:
+                0 0 0 1px rgba(53, 214, 255, 0.15),
+                0 0 35px rgba(53, 214, 255, 0.18),
+                inset 0 0 30px rgba(53, 214, 255, 0.04);
             pointer-events: none;
             z-index: 9999;
         }
 
-        /* ============ INTRO SCREEN ============ */
-        #introScreen {
+        /* Scanlines */
+        body::after {
+            content: '';
             position: fixed;
             inset: 0;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9000;
-            gap: 20px;
-        }
-
-        #introScreen.hidden {
-            animation: fadeOut 0.8s ease forwards;
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                pointer-events: none;
-            }
-        }
-
-        .intro-classified {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: clamp(40px, 10vw, 80px);
-            letter-spacing: 12px;
-            color: var(--red);
-            text-shadow: 0 0 40px var(--red), 0 0 80px rgba(255, 26, 26, 0.4);
-            animation: introFlicker 0.1s infinite;
-            text-align: center;
-        }
-
-        @keyframes introFlicker {
-            0% {
-                opacity: 1;
-            }
-
-            49% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.85;
-            }
-
-            51% {
-                opacity: 1;
-            }
-
-            89% {
-                opacity: 1;
-            }
-
-            90% {
-                opacity: 0.6;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        .intro-agent {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: clamp(22px, 5vw, 40px);
-            letter-spacing: 6px;
-            color: #fff;
-            opacity: 0;
-            animation: appear 0.5s ease 1.4s forwards;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .intro-sub {
-            font-size: 12px;
-            color: #fff;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: appear 0.5s ease 2.2s forwards;
-            text-align: center;
-        }
-
-        .intro-bar {
-            width: 300px;
-            max-width: 80vw;
-            height: 3px;
-            background: #111;
-            overflow: hidden;
-            opacity: 0;
-            animation: appear 0.3s ease 2.8s forwards;
-        }
-
-        .intro-bar-fill {
-            height: 100%;
-            background: var(--red);
-            width: 0%;
-            box-shadow: 0 0 10px var(--red);
-            animation: fillBar 2s ease 2.8s forwards;
-        }
-
-        @keyframes fillBar {
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes appear {
-            to {
-                opacity: 1;
-            }
-        }
-
-        #mainContent {
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-
-        #mainContent.visible {
-            opacity: 1;
-        }
-
-        /* Red vignette */
-        .vignette {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(
-                ellipse at center,
-                transparent 60%,
-                rgba(255, 26, 26, 0.08) 100%
-            );
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.02) 2px,
+                    rgba(255, 255, 255, 0.02) 4px);
+            opacity: 0.2;
             pointer-events: none;
-            z-index: 100;
+            z-index: 999;
         }
 
-        /* HEADER */
         .top-bar {
-            background: var(--red);
+            background: rgba(13, 18, 28, 0.95);
+            border: 1px solid rgba(53, 214, 255, 0.25);
+            color: #fff;
             padding: 8px 20px;
             display: flex;
             justify-content: space-between;
@@ -194,349 +97,83 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             font-weight: 700;
+            box-shadow: 0 0 18px rgba(53, 214, 255, 0.08);
+            margin-bottom: 8px;
         }
 
-        .blink {
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-        }
-
-        /* HERO SECTION */
         .hero {
             text-align: center;
-            padding: 50px 20px 30px;
+            padding: 70px 20px 30px;
             position: relative;
         }
 
-        .agent-label {
-            font-size: 12px;
+        .page-title {
+            font-family: 'PrestigeElite', 'Courier New', monospace;
+            font-size: clamp(58px, 11vw, 120px);
+            line-height: 0.88;
             letter-spacing: 5px;
             color: #fff;
+            margin-bottom: 16px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .agent-name {
-            color: var(--red);
-            text-shadow: 0 0 25px rgba(255, 26, 26, 0.45);
-        }
-
-        .risk-text {
-            font-family : 'Share Tech Mono', monospace;
-            font-size: clamp(16px, 4vw, 28px);
-            letter-spacing: 4px;
-            color: var(--red);
-            text-shadow: 0 0 20px rgba(255, 26, 26, 0.5);
-            margin-top: 8px;
-            text-transform: uppercase;
-        }
-
-        /* COUNTDOWN */
-        .countdown-section {
-            background: #000;
-            border-top: 2px solid var(--red);
-            border-bottom: 2px solid var(--red);
-            padding: 30px 20px;
-            text-align: center;
-            position: relative;
-            box-shadow: inset 0 0 60px rgba(255, 26, 26, 0.05);
-        }
-
-        .countdown-label {
-            font-size: 10px;
-            letter-spacing: 5px;
-            color: var(--red);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .countdown-display {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: clamp(50px, 16vw, 130px);
-            letter-spacing: 4px;
-            color: var(--red);
             text-shadow:
-                0 0 20px var(--red),
-                0 0 60px rgba(255, 26, 26, 0.4),
-                0 0 120px rgba(255, 26, 26, 0.2);
-            line-height: 1;
-            animation: countPulse 1s ease-in-out infinite;
+                0 0 12px rgba(255, 255, 255, 0.2),
+                0 0 35px rgba(53, 214, 255, 0.15);
         }
 
-        @keyframes countPulse {
-
-            0%,
-            100% {
-                filter: brightness(1);
-            }
-
-            50% {
-                filter: brightness(1.15);
-            }
-        }
-
-        .countdown-sub {
-            font-size: 11px;
-            color: #fff;
-            letter-spacing: 3px;
-            margin-top: 8px;
+        .subtitle {
+            font-size: 12px;
+            color: var(--text-dim);
+            letter-spacing: 4px;
             text-transform: uppercase;
-        }
-
-        /* MAIN DASHBOARD */
-        .dashboard {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px 80px;
+            margin-bottom: 50px;
         }
 
         .section-title {
             font-family: 'Share Tech Mono', monospace;
             font-size: 26px;
             letter-spacing: 5px;
-            color: var(--red);
+            color: var(--cyan);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 12px;
+            text-transform: uppercase;
         }
 
         .section-title::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: var(--red);
-            opacity: 0.3;
+            background: linear-gradient(to right,
+                    rgba(53, 214, 255, 0.45),
+                    transparent);
         }
 
-        /* THREAT METER */
-        .threat-card {
-            background: var(--surface);
-            border: 1px solid #1a1a1a;
-            padding: 24px;
-            margin-bottom: 30px;
-            position: relative;
+        .prob-card,
+        .threat-card,
+        .consequences-card,
+        .custom-msg-card {
+            background: rgba(13, 18, 28, 0.95);
+            border: 1px solid rgba(53, 214, 255, 0.18);
+            box-shadow: 0 0 24px rgba(53, 214, 255, 0.05);
         }
 
-        .threat-meter {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 16px;
-        }
-
-        .threat-segment {
-            flex: 1;
-            height: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .threat-segment .bar {
-            position: absolute;
-            inset: 0;
-            opacity: 0.2;
-            transition: opacity 0.3s;
-        }
-
-        .threat-segment.active .bar {
-            opacity: 1;
-        }
-
-        .threat-segment .bar {
-            background: var(--red);
-            box-shadow: 0 0 20px var(--red);
-        }
-
-        .threat-segment:nth-child(4) .bar {
-            animation: segPulse 0.7s ease-in-out infinite;
-        }
-
-        @keyframes segPulse {
-
-            0%,
-            100% {
-                opacity: 0.2;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .threat-segment.active:nth-child(4) .bar {
-            animation: segActivePulse 0.7s ease-in-out infinite;
-        }
-
-        @keyframes segActivePulse {
-
-            0%,
-            100% {
-                opacity: 0.8;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .threat-labels {
-            display: flex;
-            font-size: 9px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #fff;
-        }
-
-        .threat-labels span {
-            flex: 1;
-            text-align: center;
-        }
-
-        .threat-status {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 32px;
-            letter-spacing: 3px;
-            margin-top: 12px;
-            transition: color 0.5s;
-        }
-
-        /* PROBABILITY METER */
-        .prob-card {
-            background: var(--surface);
-            border: 1px solid #1a1a1a;
-            padding: 24px;
-            margin-bottom: 30px;
-        }
-
-        .prob-label {
-            font-size: 11px;
-            letter-spacing: 3px;
+        .agent-name {
+            font-family: 'PrestigeElite', 'Courier New', monospace;
+            font-size: clamp(58px, 11vw, 120px);
+            line-height: 0.88;
+            letter-spacing: 5px;
             color: #fff;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            text-shadow:
+                0 0 12px rgba(255, 255, 255, 0.2),
+                0 0 35px rgba(53, 214, 255, 0.15);
         }
 
-        .prob-bar-wrap {
-            background: #000;
-            height: 50px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #1a1a1a;
-        }
-
-        .prob-bar-fill {
-            height: 100%;
-            background: var(--red);
-        }
-
-        .prob-number {
-            color: var(--red);
-            text-shadow: 0 0 30px rgba(255, 26, 26, 0.5);
-        }
-
-        .prob-caption {
-            font-size: 11px;
-            color: #fff;
-            letter-spacing: 2px;
-            margin-top: 6px;
-        }
-
-        /* MISSION CHECKLIST */
-        .checklist {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .check-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 18px 20px;
-            background: var(--surface);
-            border: 1px solid #1a1a1a;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-        }
-
-        .check-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: #fff;
-            transition: background 0.3s;
-        }
-
-        .check-item:hover {
-            border-color: #fff;
-        }
-
-        .check-item:hover::before {
-            background: var(--red);
-        }
-
-        .check-item.done {
-            opacity: 0.5;
-            text-decoration: line-through;
-        }
-
-        .check-item.done::before {
-            background: var(--red);
-        }
-
-        .check-box {
-            width: 22px;
-            height: 22px;
-            border: 2px solid #fff;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .check-item.done .check-box {
-            border-color: var(--green);
-            color: var(--green);
-        }
-
-        .check-text {
-            flex: 1;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
-
-        .check-sub {
-            font-size: 10px;
-            color: #fff;
-            margin-top: 2px;
-            letter-spacing: 1px;
-        }
-
-        /* DANGER BUTTONS */
         .action-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 16px;
             margin-bottom: 30px;
         }
 
@@ -552,157 +189,130 @@
         }
 
         .danger-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 24px 16px;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 20px;
-            letter-spacing: 2px;
-            text-align: center;
             position: relative;
-            z-index: 2;
-            transition: transform 0.1s;
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-            border-left: 2px solid rgba(255, 255, 255, 0.1);
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            padding: 22px 20px;
+            text-align: center;
             color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 18px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: 0.12s ease;
+            border-top: 2px solid rgba(255, 255, 255, 0.15);
+            border-left: 2px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Maps Button - Green */
+        /* NAVY */
         .btn-maps .danger-inner {
-            background: var(--red);
+            background: linear-gradient(180deg,
+                    var(--navy),
+                    var(--navy-dark));
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 6px 0 #4d0000,
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 6px 0 #0d1324,
                 0 10px 20px rgba(0, 0, 0, 0.6);
         }
 
         .btn-maps:hover .danger-inner {
             transform: translateY(3px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #4d0000, 0 6px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-maps:active .danger-inner {
-            transform: translateY(6px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #4d0000, 0 2px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Apology button - Orange */
-        .btn-apology .danger-inner {
-            background: var(--red);
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                0 6px 0 #4d0000,
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 3px 0 #0d1324,
+                0 6px 14px rgba(0, 0, 0, 0.45);
+        }
+
+        /* GREEN */
+        .btn-apology .danger-inner {
+            background: linear-gradient(180deg,
+                    var(--green),
+                    var(--green-dark));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 6px 0 #00250f,
                 0 10px 20px rgba(0, 0, 0, 0.6);
         }
 
         .btn-apology:hover .danger-inner {
             transform: translateY(3px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 0 #4d0000, 0 6px 12px rgba(0, 0, 0, 0.5);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 3px 0 #00250f,
+                0 6px 14px rgba(0, 0, 0, 0.45);
         }
 
-        .btn-apology:active .danger-inner {
-            transform: translateY(6px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0px 0 #4d0000, 0 2px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Abort - Red */
+        /* RED */
         .btn-abort {
             grid-column: span 2;
         }
 
         .btn-abort .danger-inner {
-            background: var(--red);
+            background: linear-gradient(180deg,
+                    var(--red),
+                    var(--dark-red));
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                0 6px 0 #4d0000,
-                0 10px 20px rgba(0, 0, 0, 0.7);
-            font-size: 24px;
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 7px 0 #460000,
+                0 12px 24px rgba(0, 0, 0, 0.55);
         }
 
         .btn-abort:hover .danger-inner {
             transform: translateY(3px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 3px 0 #4d0000, 0 5px 12px rgba(0, 0, 0, 0.5);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 4px 0 #460000,
+                0 8px 18px rgba(0, 0, 0, 0.45);
         }
 
-        .btn-abort:active .danger-inner {
-            transform: translateY(6px);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0px 0 #4d0000, 0 2px 8px rgba(0, 0, 0, 0.4);
+        .danger-btn:active .danger-inner {
+            transform: translateY(7px);
         }
 
-        .btn-icon {
-            font-size: 30px;
-        }
-
-        .btn-sub {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 2px;
-            font-family: 'Share Tech Mono', monospace;
-            font-weight: 400;
-        }
-
-        /* FAILURE CONSEQUENCES */
-        .consequences-card {
-            background: rgba(255, 26, 26, 0.04);
-            border: 1px solid rgba(255, 26, 26, 0.2);
-            padding: 24px;
+        /* COUNTDOWN */
+        .countdown-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(13, 18, 28, 0.95);
+            border: 1px solid rgba(53, 214, 255, 0.18);
             margin-bottom: 30px;
+            box-shadow: 0 0 24px rgba(53, 214, 255, 0.05);
         }
 
-        .consequences-title {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 20px;
+        .countdown-label {
+            font-size: 12px;
             letter-spacing: 3px;
-            color: var(--red);
+            color: var(--cyan);
+            text-transform: uppercase;
             margin-bottom: 16px;
-            text-shadow: 0 0 10px rgba(255, 26, 26, 0.4);
         }
 
-        .consequence-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+        .countdown-display {
+            font-family: 'PrestigeElite', 'Courier New', monospace;
+            font-size: 64px;
+            color: var(--red);
+            letter-spacing: 8px;
+            margin-bottom: 12px;
+            text-shadow:
+                0 0 12px rgba(255, 26, 26, 0.4),
+                0 0 35px rgba(255, 26, 26, 0.2);
         }
 
-        .consequence-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 13px;
-            color: #fff;
-            padding: 8px 0;
-            border-bottom: 1px solid #111;
-        }
-
-        .consequence-item:last-child {
-            border-bottom: none;
-        }
-
-        .consequence-icon {
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .consequence-text {
-            color: #fff;
-        }
-
-        .consequence-sub {
+        .countdown-sub {
             font-size: 10px;
-            color: #fff;
-            margin-top: 2px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
         }
 
-        /* Custom message banner */
+        .dashboard {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            position: relative;
+            z-index: 2;
+        }
+
         .custom-msg-card {
-            background: rgba(255, 26, 26, 0.05);
-            border: 1px solid rgba(255, 26, 26, 0.2);
-            padding: 18px 20px;
+            padding: 24px;
             margin-bottom: 30px;
             display: none;
         }
@@ -712,155 +322,231 @@
         }
 
         .custom-msg-label {
-            font-size: 9px;
+            font-size: 10px;
             letter-spacing: 3px;
-            color: var(--red);
+            color: var(--cyan);
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 14px;
         }
 
         .custom-msg-text {
-            font-size: 14px;
+            font-size: 16px;
             color: #fff;
-            font-style: italic;
             line-height: 1.6;
+            font-style: italic;
+            color: #9fe9ff;
         }
 
-        /* Meme floaters */
-        .floater {
-            position: fixed;
-            font-size: 60px;
-            opacity: 0.04;
-            pointer-events: none;
-            user-select: none;
-            animation: floatBob 6s ease-in-out infinite;
+        .baddie-card {
+            background: rgba(13, 18, 28, 0.95);
+            border: 1px solid rgba(53, 214, 255, 0.18);
+            box-shadow: 0 0 24px rgba(53, 214, 255, 0.05);
+            padding: 24px;
         }
 
-        @keyframes floatBob {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(var(--rot));
-            }
-
-            50% {
-                transform: translateY(-15px) rotate(calc(var(--rot) + 5deg));
-            }
+        .prob-card {
+            padding: 24px;
+            margin-bottom: 30px;
         }
 
-        .floater:nth-child(1) {
-            top: 15%;
-            right: 3%;
-            --rot: 12deg;
-            animation-delay: 0s;
+        .prob-label {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 16px;
         }
 
-        .floater:nth-child(2) {
-            bottom: 20%;
-            left: 2%;
-            --rot: -8deg;
-            animation-delay: 2s;
-            font-size: 50px;
+        .prob-bar-wrap {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(53, 214, 255, 0.2);
+            height: 32px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            position: relative;
         }
 
-        .floater:nth-child(3) {
-            top: 50%;
-            right: 1%;
-            --rot: 20deg;
-            animation-delay: 4s;
-            font-size: 40px;
+        .prob-bar-fill {
+            background: linear-gradient(90deg, var(--red), var(--dark-red));
+            height: 100%;
+            transition: width 0.2s ease;
+            box-shadow: 0 0 16px rgba(255, 26, 26, 0.6);
+        }
+
+        .prob-number {
+            font-family: 'PrestigeElite', 'Courier New', monospace;
+            font-size: 42px;
+            color: var(--cyan);
+            margin-bottom: 12px;
+            text-shadow: 0 0 12px rgba(53, 214, 255, 0.3);
+        }
+
+        .prob-caption {
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+        }
+
+        .consequences-card {
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .consequences-title {
+            font-size: 14px;
+            color: var(--red);
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+        }
+
+        .consequence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .consequence-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 26, 26, 0.05);
+            border-left: 2px solid var(--red);
+        }
+
+        .consequence-icon {
+            color: var(--red);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .consequence-text {
+            font-size: 13px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .consequence-sub {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 4px;
         }
 
         .footer-note {
             text-align: center;
-            font-size: 10px;
-            color: #fff;
-            letter-spacing: 2px;
-            padding: 20px;
-            text-transform: uppercase;
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-top: 40px;
+            padding-bottom: 20px;
         }
 
-        /* Abort modal */
+        /* ABORT MODAL */
         .modal-overlay {
+            display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
             align-items: center;
             justify-content: center;
-            z-index: 8000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            padding: 20px;
+            backdrop-filter: blur(4px);
         }
 
         .modal-overlay.visible {
-            opacity: 1;
-            pointer-events: all;
+            display: flex;
         }
 
         .modal-card {
-            background: var(--surface);
+            background: rgba(13, 18, 28, 0.98);
             border: 2px solid var(--red);
-            padding: 40px 30px;
-            /* Allow larger modal so the GIF isn't overly cropped */
-            max-width: 760px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 0 60px rgba(255, 26, 26, 0.2);
-        }
-
-        .modal-emoji {
-            font-size: 80px;
-            display: block;
-            margin-bottom: 20px;
+            padding: 40px;
+            max-width: 640px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow:
+                0 0 50px rgba(255, 26, 26, 0.3),
+                0 0 80px rgba(53, 214, 255, 0.1);
         }
 
         .modal-title {
-            font-family: 'Share Tech Mono', monospace;
+            font-family: 'PrestigeElite', 'Courier New', monospace;
             font-size: 48px;
-            letter-spacing: 3px;
             color: var(--red);
-            margin-bottom: 10px;
+            text-align: center;
+            margin: 20px 0;
+            letter-spacing: 4px;
+            text-shadow: 0 0 12px rgba(255, 26, 26, 0.3);
         }
 
         .modal-text {
-            font-size: 13px;
+            font-size: 14px;
             color: #fff;
-            line-height: 1.7;
+            text-align: center;
+            line-height: 1.8;
             margin-bottom: 24px;
-            letter-spacing: 0.5px;
-        }
-
-        .modal-quote {
-            font-size: 12px;
-            color: #fff;
-            border-left: 2px solid #fff;
-            padding: 10px 16px;
-            text-align: left;
-            font-style: italic;
-            margin-bottom: 24px;
-            line-height: 1.6;
         }
 
         .modal-close {
-            background: #111;
-            color: #fff;
-            border: 1px solid #fff;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 2px;
-            padding: 12px 24px;
-            cursor: pointer;
-            text-transform: uppercase;
             width: 100%;
-            transition: all 0.2s;
+            padding: 16px 20px;
+            background: linear-gradient(180deg, var(--navy), var(--navy-dark));
+            color: #fff;
+            border: none;
+            border-top: 2px solid rgba(255, 255, 255, 0.15);
+            border-left: 2px solid rgba(255, 255, 255, 0.08);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.12s ease;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 7px 0 #0d1324,
+                0 12px 24px rgba(0, 0, 0, 0.55);
         }
 
         .modal-close:hover {
-            border-color: #fff;
-            color: #fff;
+            transform: translateY(3px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 4px 0 #0d1324,
+                0 8px 18px rgba(0, 0, 0, 0.45);
+        }
+
+        .modal-close:active {
+            transform: translateY(7px);
+        }
+
+        @media (max-width: 640px) {
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-abort {
+                grid-column: span 1;
+            }
+
+            .page-title {
+                letter-spacing: 3px;
+            }
+
+            body {
+                padding: 10px;
+            }
+
+            .countdown-display {
+                font-size: 48px;
+            }
+
+            .modal-card {
+                margin: 20px;
+                padding: 24px;
+            }
+
+            .modal-title {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
@@ -876,10 +562,8 @@
         </div>
 
         <div class="hero">
-            <p class="agent-label">Agent</p>
-            <span class="agent-name" id="heroName">JASON</span>
-            <p class="risk-text" id="riskText">You Are At Severe Risk Of
-                Fumbling</p>
+            <span class="agent-name" id="heroName">AGENT</span>
+            <p class="subtitle">You Are At Severe Risk Of Fumbling</p>
         </div>
 
         <!-- COUNTDOWN -->
@@ -896,6 +580,7 @@
                 <div class="custom-msg-label">Incoming Intel from HQ</div>
                 <div class="custom-msg-text" id="customMsgText"></div>
             </div>
+
             <!-- BADDIE PHOTO -->
             <div class="baddie-card" id="baddieCard"
                 style="display:none; margin-bottom:30px; text-align:center;">
@@ -907,6 +592,7 @@
                     style="max-width:100%; max-height:340px; object-fit:cover;
                     border:2px solid var(--red); box-shadow:0 0 40px rgba(255,26,26,0.3);" />
             </div>
+
             <!-- PROBABILITY METER -->
             <div class="section-title">Bag Security</div>
             <div class="prob-card">
@@ -930,7 +616,9 @@
                     <div class="danger-inner">
                         <span class="btn-icon"></span>
                         Locate Restaurants
-                        <span class="btn-sub" id="cityLabel">Nearby</span>
+                        <span
+                            style="display: block; font-size: 12px; letter-spacing: 1px; margin-top: 4px;"
+                            id="cityLabel">Nearby</span>
                     </div>
                 </button>
 
@@ -940,7 +628,9 @@
                     <div class="danger-inner">
                         <span class="btn-icon"></span>
                         Send Apology
-                        <span class="btn-sub">emergency protocol</span>
+                        <span
+                            style="display: block; font-size: 12px; letter-spacing: 1px; margin-top: 4px;">emergency
+                            protocol</span>
                     </div>
                 </button>
 
@@ -950,8 +640,9 @@
                     <div class="danger-inner">
                         <span class="btn-icon"></span>
                         ABORT MISSION
-                        <span class="btn-sub">not recommended · career ending
-                            move</span>
+                        <span
+                            style="display: block; font-size: 12px; letter-spacing: 1px; margin-top: 4px;">not
+                            recommended · career ending move</span>
                     </div>
                 </button>
 
@@ -964,7 +655,7 @@
                     mission may result in:</div>
                 <div class="consequence-list">
                     <div class="consequence-item">
-                        <span class="consequence-icon"></span>
+                        <span class="consequence-icon">⚠</span>
                         <div>
                             <div class="consequence-text">Total and irreversible
                                 loss of aura</div>
@@ -973,7 +664,7 @@
                         </div>
                     </div>
                     <div class="consequence-item">
-                        <span class="consequence-icon"></span>
+                        <span class="consequence-icon">⚠</span>
                         <div>
                             <div class="consequence-text">Left on delivered for
                                 3+ business days</div>
@@ -982,7 +673,7 @@
                         </div>
                     </div>
                     <div class="consequence-item">
-                        <span class="consequence-icon"></span>
+                        <span class="consequence-icon">⚠</span>
                         <div>
                             <div class="consequence-text">Her friends are
                                 already judging you collectively</div>
@@ -1009,15 +700,13 @@
             <div class="modal-title">ABORT?</div>
             <p class="modal-text">
                 You're genuinely considering not going on a date with someone
-                who likes you.<br>
+                who likes you.<br><br>
                 Let that sink in for a second.
             </p>
             <button class="modal-close" onclick="closeAbortModal()">← Return to
                 Mission (Good Choice)</button>
         </div>
     </div>
-
-    
 
     <script>
         // ─── Parse URL Params ───────────────────────────────────────
@@ -1029,22 +718,23 @@
         const customMsg = params.get('m') || '';
 
         // ─── Init ────────────────────────────────────────────────────
-            document.getElementById('heroName').textContent = recipientName.toUpperCase();
-            document.getElementById('mainContent').classList.add('visible');
+        document.getElementById('heroName').textContent = recipientName.toUpperCase();
+        document.getElementById('mainContent').classList.add('visible');
 
-            const photoUrl = params.get('photo');
-            if (photoUrl) {
-                document.getElementById('baddieImg').src = decodeURIComponent(photoUrl);
-                document.getElementById('baddieCard').style.display = 'block';
-            }
+        const photoUrl = params.get('photo');
+        if (photoUrl) {
+            document.getElementById('baddieImg').src = decodeURIComponent(photoUrl);
+            document.getElementById('baddieCard').style.display = 'block';
+        }
 
-            if (customMsg) {
-                document.getElementById('customMsgCard').classList.add('visible');
-                document.getElementById('customMsgText').textContent = `"${customMsg}"`;
-            }
-            let totalSeconds = Math.round(hoursUntil * 3600);
-            startCountdown();
-            setupCity();
+        if (customMsg) {
+            document.getElementById('customMsgCard').classList.add('visible');
+            document.getElementById('customMsgText').textContent = `"${customMsg}"`;
+        }
+
+        let totalSeconds = Math.round(hoursUntil * 3600);
+        startCountdown();
+        setupCity();
 
         // ─── Countdown ──────────────────────────────────────────────
         function startCountdown() {
@@ -1150,13 +840,14 @@
         }
     </script>
     <!-- Background audio: attempts autoplay -->
-    <audio id="bgAudio" src="assets/Mission Impossible Theme (Full Theme) 4.mp3" loop preload="auto"></audio>
+    <audio id="bgAudio" src="assets/Mission Impossible Theme (Full Theme) 4.mp3"
+        loop preload="auto"></audio>
     <button id="bgAudioBtn" aria-label="Play background music"
         style="position:fixed;left:18px;bottom:18px;z-index:10000;padding:10px 14px;background:var(--red);color:#fff;border:none;border-radius:8px;display:none;box-shadow:0 6px 18px rgba(0,0,0,0.5);">
         ▶ Play Music
     </button>
     <script>
-        (function() {
+        (function () {
             const audio = document.getElementById('bgAudio');
             const btn = document.getElementById('bgAudioBtn');
 
